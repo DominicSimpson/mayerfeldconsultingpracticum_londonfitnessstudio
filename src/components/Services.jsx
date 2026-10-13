@@ -21,7 +21,7 @@ function Services() {
   return (
     <section className="services">
       {services.map((service) => (
-        <article className="service" key={service.title}>
+        <article className="service-card" key={service.title}>
           <h2>{service.title}</h2>
           <p>{service.text}</p>
           <a href="#" className="card-link">

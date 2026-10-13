@@ -1,12 +1,9 @@
-import { useState } from "react";
 import Header from "./components/Header";
 import Services from "./components/Services";
 import Footer from "./components/Footer";
 import studioPhoto from "./assets/london_fitness_studio_photo.jpg";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <Header />

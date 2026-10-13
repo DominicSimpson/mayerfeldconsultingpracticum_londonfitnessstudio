@@ -2,7 +2,7 @@ import logo from "../assets/lfs_logo.png";
 
 function Header() {
   return (
-    <header id="fitness_studio_heading">
+    <header id="fitness-studio-heading">
       <div id="logo">
         <a href="#">
           <img src={logo} alt="London Fitness Studio Logo" />
