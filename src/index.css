@@ -4,7 +4,8 @@
   --header: #19b0ec;
   --footer: #876464;
   --main: #efe3e3;
-  --card: #f8f8f8;
+  --card: #ffffff;
+  --card-border: #d9c7c7;
   --nav-text: #0b2540;
 }
 
@@ -139,14 +140,27 @@ p {
   gap: 0.75rem;
   padding: 1.5rem;
   background-color: var(--card);
+  border: 1px solid var(--card-border);
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 1px 2px rgba(60, 30, 30, 0.12),
+    0 4px 12px rgba(60, 30, 30, 0.12);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .service-card h2 {
   font-size: 1.25rem;
   font-family: "Roboto", sans-serif;
   font-weight: 700;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 2px 4px rgba(60, 30, 30, 0.14),
+    0 12px 24px rgba(60, 30, 30, 0.18);
 }
 
 .card-link {
