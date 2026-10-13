@@ -1,11 +1,5 @@
 @import "tailwindcss";
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 :root {
   --header: #19b0ec;
   --footer: #876464;
@@ -19,10 +13,14 @@
 */
 
 body {
+  min-height: 100vh;
+  background-color: var(--main);
+}
+
+#root {
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
-  background-color: var(--main);
 }
 
 /* ---------- HEADER: Grid ----------
@@ -74,7 +72,7 @@ h1.abril-fatface-regular {
 
 #nav-bar a {
   color: var(--nav-text);
-  font-family: "Playfair Display";
+  font-family: "Playfair Display", serif;
   font-size: 24px;
   font-style: normal;
   font-variant: normal;
@@ -120,11 +118,6 @@ p {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-variation-settings:
-    "slnt" 0,
-    "wdth" 100,
-    "GRAD" 0,
-    "ROND" 0;
   line-height: 1.5;
   font-size: 1.125rem;
 }
@@ -153,10 +146,7 @@ p {
 .service-card h2 {
   font-size: 1.25rem;
   font-family: "Roboto", sans-serif;
-  font-optical-sizing: auto;
   font-weight: 700;
-  font-style: normal;
-  font-variation-settings: "wdth" 100;
 }
 
 .card-link {
@@ -182,13 +172,4 @@ p {
 
 #footer-section p {
   color: #fff;
-  font-family: "Google Sans Flex", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings:
-    "slnt" 0,
-    "wdth" 100,
-    "GRAD" 0,
-    "ROND" 0;
 }
