@@ -1,6 +1,8 @@
 import logo from "../assets/lfs_logo.png";
 
 function Header() {
+  const links = ["Home", "About", "Services", "Contact"];
+
   return (
     <header
       className="grid grid-cols-[1fr_auto_1fr] items-center p-4 gap-y-4 
@@ -21,15 +23,20 @@ function Header() {
       </a>
       <h1
         className="[grid-area:title] font-display text-[clamp(2rem,6vw,5rem)] 
-      max-[600px]:text-[length:camp(1.5rem,7vm,2rem)] max-[600px]:text-left"
+      max-[600px]:text-[clamp(1.5rem,7vw,2rem)] max-[600px]:text-left"
       >
         London Fitness Studio
       </h1>
-      <nav id="nav-bar">
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
+      <nav className="[grid-area:nav] font-serif flex justify-center items-center flex-wrap gap-4 p-4">
+        {links.map((label) => (
+          <a
+            key={label}
+            href="#"
+            className="text-2xl font-bold text-nav-text hover:underline"
+          >
+            {label}
+          </a>
+        ))}
       </nav>
     </header>
   );

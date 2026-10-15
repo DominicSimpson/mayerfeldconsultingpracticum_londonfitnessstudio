@@ -2,6 +2,12 @@
 
 @theme {
   --font-display: "Abril Fatface", cursive;
+  --font-serif: "Playfair Display", serif;
+}
+
+@theme inline {
+  --color-main: var(--main);
+  --color-nav-text: var(--nav-text);
 }
 
 :root {
@@ -11,34 +17,6 @@
   --card: #ffffff;
   --card-border: #d9c7c7;
   --nav-text: #0b2540;
-  --color-main: var(--main);
-}
-
-/* ---------- NAV: Flexbox ----------
-   A single row of links is a classic one-dimensional job. */
-#nav-bar {
-  grid-area: nav;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem 3rem;
-  padding: 1rem;
-}
-
-#nav-bar a {
-  color: var(--nav-text);
-  font-family: "Playfair Display", serif;
-  font-size: 24px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 700;
-  line-height: 26.4px;
-  text-decoration: none;
-}
-
-#nav-bar a:hover {
-  text-decoration: underline;
 }
 
 /* ---------- MAIN CONTENT ---------- */
