@@ -23,17 +23,6 @@
 /* ---------- HEADER: Grid ----------
    Logo | Title | (empty balance column) on the first row,
    nav spanning the full width on the second row. */
-#fitness-studio-heading {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  grid-template-areas:
-    "logo title ."
-    "nav  nav   nav";
-  align-items: center;
-  padding: 1rem;
-  row-gap: 1rem;
-  background-color: var(--header);
-}
 
 #logo {
   grid-area: logo;

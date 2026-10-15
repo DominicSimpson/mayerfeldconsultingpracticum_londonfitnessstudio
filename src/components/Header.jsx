@@ -2,7 +2,7 @@ import logo from "../assets/lfs_logo.png";
 
 function Header() {
   return (
-    <header id="fitness-studio-heading">
+    <header className="grid grid-cols-[1fr_auto_1fr] items-center p-4 gap-y-4 [grid-template-areas:'logo_title_.'_'nav_nav_nav']">
       <div id="logo">
         <a href="#">
           <img src={logo} alt="London Fitness Studio Logo" />
