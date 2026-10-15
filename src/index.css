@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --font-display: "Abril Fatface", cursive;
+  --font-serif: "Playfair Display", serif;
+}
+
+@theme inline {
+  --color-main: var(--main);
+  --color-nav-text: var(--nav-text);
+}
+
 :root {
   --header: #19b0ec;
   --footer: #876464;
@@ -7,103 +17,6 @@
   --card: #ffffff;
   --card-border: #d9c7c7;
   --nav-text: #0b2540;
-}
-
-/* ---------- PAGE LAYOUT: Grid ----------
-   Three rows: header (auto), main (takes remaining space), footer (auto).
-*/
-
-body {
-  min-height: 100vh;
-  background-color: var(--main);
-}
-
-#root {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  min-height: 100vh;
-}
-
-/* ---------- HEADER: Grid ----------
-   Logo | Title | (empty balance column) on the first row,
-   nav spanning the full width on the second row. */
-#fitness-studio-heading {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  grid-template-areas:
-    "logo title ."
-    "nav  nav   nav";
-  align-items: center;
-  padding: 1rem;
-  row-gap: 1rem;
-  background-color: var(--header);
-}
-
-#logo {
-  grid-area: logo;
-  justify-self: start;
-  padding: 20px;
-}
-
-#logo img {
-  max-height: 80px;
-  width: auto;
-  display: block;
-}
-
-h1.abril-fatface-regular {
-  grid-area: title;
-  min-width: 0;
-  font-family: "Abril Fatface", cursive;
-  font-weight: 400;
-  font-style: normal;
-  font-size: clamp(2rem, 6vw, 5rem);
-  text-align: center;
-}
-
-@media (max-width: 600px) {
-  #fitness-studio-heading {
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      "logo title"
-      "nav  nav";
-  }
-
-  #logo {
-    padding: 10px;
-  }
-
-  h1.abril-fatface-regular {
-    font-size: clamp(1.5rem, 7vw, 2rem);
-    text-align: left;
-  }
-}
-
-/* ---------- NAV: Flexbox ----------
-   A single row of links is a classic one-dimensional job. */
-#nav-bar {
-  grid-area: nav;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem 3rem;
-  padding: 1rem;
-}
-
-#nav-bar a {
-  color: var(--nav-text);
-  font-family: "Playfair Display", serif;
-  font-size: 24px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 700;
-  line-height: 26.4px;
-  text-decoration: none;
-}
-
-#nav-bar a:hover {
-  text-decoration: underline;
 }
 
 /* ---------- MAIN CONTENT ---------- */
