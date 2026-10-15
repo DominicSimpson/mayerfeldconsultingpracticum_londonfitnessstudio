@@ -24,18 +24,6 @@
    Logo | Title | (empty balance column) on the first row,
    nav spanning the full width on the second row. */
 
-#logo {
-  grid-area: logo;
-  justify-self: start;
-  padding: 20px;
-}
-
-#logo img {
-  max-height: 80px;
-  width: auto;
-  display: block;
-}
-
 h1.abril-fatface-regular {
   grid-area: title;
   min-width: 0;
