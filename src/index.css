@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-display: "Abril Fatface", cursive;
+}
+
 :root {
   --header: #19b0ec;
   --footer: #876464;
@@ -8,48 +12,6 @@
   --card-border: #d9c7c7;
   --nav-text: #0b2540;
   --color-main: var(--main);
-}
-
-/* ---------- PAGE LAYOUT: Grid ----------
-   Three rows: header (auto), main (takes remaining space), footer (auto).
-*/
-
-#root {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  min-height: 100vh;
-}
-
-/* ---------- HEADER: Grid ----------
-   Logo | Title | (empty balance column) on the first row,
-   nav spanning the full width on the second row. */
-
-h1.abril-fatface-regular {
-  grid-area: title;
-  min-width: 0;
-  font-family: "Abril Fatface", cursive;
-  font-weight: 400;
-  font-style: normal;
-  font-size: clamp(2rem, 6vw, 5rem);
-  text-align: center;
-}
-
-@media (max-width: 600px) {
-  #fitness-studio-heading {
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      "logo title"
-      "nav  nav";
-  }
-
-  #logo {
-    padding: 10px;
-  }
-
-  h1.abril-fatface-regular {
-    font-size: clamp(1.5rem, 7vw, 2rem);
-    text-align: left;
-  }
 }
 
 /* ---------- NAV: Flexbox ----------
