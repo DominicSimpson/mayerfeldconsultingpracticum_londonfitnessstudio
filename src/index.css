@@ -3,11 +3,14 @@
 @theme {
   --font-display: "Abril Fatface", cursive;
   --font-serif: "Playfair Display", serif;
+  --font-service-card: "Roboto", sans-serif;
 }
 
 @theme inline {
   --color-main: var(--main);
   --color-nav-text: var(--nav-text);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
 }
 
 :root {
@@ -57,17 +60,17 @@ p {
 }
 /* ---------- SERVICES: Grid ----------
    Responsive card grid: as many 240px+ columns as fit, no media queries. */
-.services {
+/* .services {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
-}
+} */
 
 /* ---------- CARD CONTENT: Flexbox ----------
    Column flex lets the "Learn more" link sit at the bottom of every card,
    even when the descriptions have different lengths. */
-.service-card {
+/* .service-card {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -81,13 +84,13 @@ p {
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
-}
+} */
 
-.service-card h2 {
+/* .service-card h2 {
   font-size: 1.25rem;
   font-family: "Roboto", sans-serif;
   font-weight: 700;
-}
+} */
 
 .service-card:hover {
   transform: translateY(-4px);

@@ -19,10 +19,17 @@ const services = [
 
 function Services() {
   return (
-    <section className="services">
+    <section className="w-full grid grid-cols-[repeat(auto-fit,minmax(240px, 1fr))] gap-6">
       {services.map((service) => (
-        <article className="service-card" key={service.title}>
-          <h2>{service.title}</h2>
+        <article
+          className="bg-card border border-card-border flex flex-col gap-3 p-6 rounded-lg 
+          shadow-[0_1px_2px_rgba(60,30,30,0.12),0_4px_12px_rgba(60,30,30,0.12)]
+          transition-[transform, box-shadow] duration-200 ease-[ease]"
+          key={service.title}
+        >
+          <h2 className="font-service-card text-xl font-bold">
+            {service.title}
+          </h2>
           <p>{service.text}</p>
           <a href="#" className="card-link">
             Learn more
