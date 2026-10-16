@@ -3,25 +3,36 @@ import Services from "./components/Services";
 import Footer from "./components/Footer";
 import studioPhoto from "./assets/london_fitness_studio_photo.jpg";
 
+function Paragraph({ children }) {
+  return (
+    <p
+      className="text-lg leading-relaxed font-p-text [font-optical-sizing:auto] 
+      font-normal not-italic"
+    >
+      {children}
+    </p>
+  );
+}
+
 function App() {
   return (
     <>
       <Header />
 
-      <main id="body-section">
-        <figure className="lfs-photo">
+      <main className="flex flex-col w-full max-w-275 mx-auto py-8 px-8 items-center gap-6">
+        <figure className="h-auto max-w-full w-250 block">
           <img src={studioPhoto} alt="London Fitness Studio" />
         </figure>
 
-        <section className="intro">
-          <p>
+        <section className="text-center max-w-[60ch] flex flex-col gap-4">
+          <Paragraph>
             Welcome to London Fitness Studio! We offer fitness training and
             wellness services to help you achieve your health goals.
-          </p>
-          <p>
+          </Paragraph>
+          <Paragraph>
             Click on our navigation links to learn more about our offerings,
             including:
-          </p>
+          </Paragraph>{" "}
         </section>
 
         <Services />
