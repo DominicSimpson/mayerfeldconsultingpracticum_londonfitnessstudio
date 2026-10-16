@@ -1,3 +1,5 @@
+import Paragraph from "./Paragraph.jsx";
+
 const services = [
   {
     title: "Fitness Classes",
@@ -32,7 +34,7 @@ function Services() {
           <h2 className="font-service-card text-xl font-bold">
             {service.title}
           </h2>
-          <p>{service.text}</p>
+          <Paragraph>{service.text}</Paragraph>
           <a
             href="#"
             className="mt-auto self-start font-bold text-nav-text hover:underline focus-visible:underline"
