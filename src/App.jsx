@@ -10,7 +10,7 @@ function App() {
       <Header />
 
       <main className="flex flex-col w-full max-w-275 mx-auto py-8 px-8 items-center gap-6">
-        <figure className="h-auto max-w-full w-250 block">
+        <figure className="block w-full max-w-250">
           <img
             className="w-full h-auto"
             src={studioPhoto}

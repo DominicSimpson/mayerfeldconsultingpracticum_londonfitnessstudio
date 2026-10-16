@@ -5,22 +5,11 @@
   --font-serif: "Playfair Display", serif;
   --font-service-card: "Roboto", sans-serif;
   --font-p-text: "Google Sans Flex", sans-serif;
-}
 
-@theme inline {
-  --color-header: var(--header);
-  --color-main: var(--main);
-  --color-nav-text: var(--nav-text);
-  --color-card: var(--card);
-  --color-card-border: var(--card-border);
-  --color-footer: var(--footer);
-}
-
-:root {
-  --header: #19b0ec;
-  --footer: #876464;
-  --main: #efe3e3;
-  --card: #ffffff;
-  --card-border: #d9c7c7;
-  --nav-text: #0b2540;
+  --color-header: #19b0ec;
+  --color-footer: #876464;
+  --color-main: #efe3e3;
+  --color-card: #ffffff;
+  --color-card-border: #d9c7c7;
+  --color-nav-text: #0b2540;
 }

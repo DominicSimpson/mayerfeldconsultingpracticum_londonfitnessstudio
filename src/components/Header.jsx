@@ -32,7 +32,7 @@ function Header() {
           <a
             key={label}
             href="#"
-            className="text-[1.65rem] font-bold text-nav-text hover:underline"
+            className="font-bold text-nav-text hover:underline mx-2 sm:mx-6 text-2xl"
           >
             {label}
           </a>
