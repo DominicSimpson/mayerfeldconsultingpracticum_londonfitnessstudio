@@ -2,17 +2,7 @@ import Header from "./components/Header";
 import Services from "./components/Services";
 import Footer from "./components/Footer";
 import studioPhoto from "./assets/london_fitness_studio_photo.jpg";
-
-function Paragraph({ children }) {
-  return (
-    <p
-      className="text-lg leading-relaxed font-p-text [font-optical-sizing:auto] 
-      font-normal not-italic"
-    >
-      {children}
-    </p>
-  );
-}
+import Paragraph from "./components/Paragraph";
 
 function App() {
   return (
@@ -21,7 +11,11 @@ function App() {
 
       <main className="flex flex-col w-full max-w-275 mx-auto py-8 px-8 items-center gap-6">
         <figure className="h-auto max-w-full w-250 block">
-          <img src={studioPhoto} alt="London Fitness Studio" />
+          <img
+            className="w-full h-auto"
+            src={studioPhoto}
+            alt="London Fitness Studio"
+          />
         </figure>
 
         <section className="text-center max-w-[60ch] flex flex-col gap-4">
@@ -32,7 +26,7 @@ function App() {
           <Paragraph>
             Click on our navigation links to learn more about our offerings,
             including:
-          </Paragraph>{" "}
+          </Paragraph>
         </section>
 
         <Services />

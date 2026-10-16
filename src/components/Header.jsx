@@ -5,7 +5,7 @@ function Header() {
 
   return (
     <header
-      className="grid grid-cols-[1fr_auto_1fr] items-center p-4 gap-y-4 
+      className="grid grid-cols-[1fr_auto_1fr] items-center p-4 gap-y-4 bg-header
       [grid-template-areas:'logo_title_._'_'nav_nav_nav']
       max-[600px]:grid-cols-[auto_minmax(0,1fr)]
       max-[600px]:[grid-template-areas:'logo_title'_'nav_nav']"
@@ -22,8 +22,8 @@ function Header() {
         />
       </a>
       <h1
-        className="[grid-area:title] font-display text-[clamp(2rem,6vw,5rem)] 
-      max-[600px]:text-[clamp(1.5rem,7vw,2rem)] max-[600px]:text-left"
+        className="[grid-area:title] font-display text-[length:clamp(2rem,6vw,5rem)] 
+      max-[600px]:text-[length:clamp(1.5rem,7vw,2rem)] max-[600px]:text-left text-center"
       >
         London Fitness Studio
       </h1>
@@ -32,7 +32,7 @@ function Header() {
           <a
             key={label}
             href="#"
-            className="text-2xl font-bold text-nav-text hover:underline"
+            className="text-[1.65rem] font-bold text-nav-text hover:underline"
           >
             {label}
           </a>

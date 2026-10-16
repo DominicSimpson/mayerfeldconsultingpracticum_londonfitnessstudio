@@ -1,7 +1,9 @@
+import Paragraph from "./Paragraph";
+
 function Footer() {
   return (
-    <footer id="footer-section">
-      <p>&copy; 2026 London Fitness Studio</p>
+    <footer className="flex justify-center items-center bg-footer p-3">
+      <Paragraph>&copy; 2026 London Fitness Studio</Paragraph>
     </footer>
   );
 }
