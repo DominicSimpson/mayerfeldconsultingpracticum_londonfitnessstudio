@@ -1,5 +1,3 @@
-import "./MembershipSelector.css";
-
 /**
  * A controlled, reusable toggle for a single selectable item.
  * It holds no state of its own: the parent decides whether it is
@@ -19,32 +17,44 @@ export default function ToggleOption({
   description,
   features = [],
 }) {
+  const base =
+    "relative flex flex-col gap-3 p-6 rounded-lg border-2 bg-card cursor-pointer " +
+    "transition-[border-color,box-shadow,opacity,filter] duration-200 " +
+    "has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-sign-up-button";
+
+  const stateClasses = selected
+    ? "border-sign-up-button ring-3 ring-sign-up-button/20"
+    : "border-card-border hover:border-gray-400";
+
+  const dimmedClasses = dimmed
+    ? "opacity-45 grayscale-[0.6] pointer-events-none cursor-default"
+    : "";
+
   return (
-    <label
-      className={`toggle-option${selected ? " toggle-option--selected" : ""}${
-        dimmed ? " toggle-option--dimmed" : ""
-      }`}
-    >
+    <label className={`${base} ${stateClasses} ${dimmedClasses}`}>
       <input
-        className="toggle-option__input"
+        className="sr-only"
         type="radio"
         name={name}
         value={value}
         checked={selected}
+        disabled={dimmed}
         onChange={() => onChange(value)}
       />
 
-      <span className="toggle-option__header">
-        <span className="toggle-option__title">{title}</span>
-        {price && <span className="toggle-option__price">{price}</span>}
+      <span className="flex justify-between items-baseline">
+        <span className="font-service-card text-xl font-bold">{title}</span>
+        {price && (
+          <span className="font-semibold text-sign-up-button">{price}</span>
+        )}
       </span>
 
       {description && (
-        <span className="toggle-option__text">{description}</span>
+        <span className="font-p-text text-gray-600">{description}</span>
       )}
 
       {features.length > 0 && (
-        <ul className="toggle-option__features">
+        <ul className="list-disc pl-5 text-sm text-nav-text">
           {features.map((feature) => (
             <li key={feature}>{feature}</li>
           ))}
