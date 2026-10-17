@@ -12,6 +12,7 @@ export default function ToggleOption({
   name,
   value,
   selected,
+  dimmed = false,
   onChange,
   title,
   price,
@@ -20,7 +21,9 @@ export default function ToggleOption({
 }) {
   return (
     <label
-      className={`toggle-option${selected ? " toggle-option--selected" : ""}`}
+      className={`toggle-option${selected ? " toggle-option--selected" : ""}${
+        dimmed ? " toggle-option--dimmed" : ""
+      }`}
     >
       <input
         className="toggle-option__input"

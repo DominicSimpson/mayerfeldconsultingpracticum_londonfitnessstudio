@@ -93,3 +93,21 @@
   color: #667085;
   cursor: not-allowed;
 }
+
+.toggle-option {
+  /* ...existing rules... */
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    opacity 0.2s,
+    filter 0.2s;
+}
+
+.toggle-option--dimmed {
+  opacity: 0.45;
+  filter: grayscale(0.6);
+}
+
+.toggle-option--dimmed:hover {
+  opacity: 0.75;
+}

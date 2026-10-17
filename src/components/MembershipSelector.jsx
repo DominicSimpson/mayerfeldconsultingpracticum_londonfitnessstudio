@@ -1,18 +1,18 @@
-import FilterMenu from "./FilterMenu.jsx";
 import { useState } from "react";
 import ToggleOption from "./ToggleOption.jsx";
-import membershipTiers from "../data/membershipTiers.js";
+import FilterMenu from "./FilterMenu.jsx";
+import membershipTiers from "../data/membershipTiers";
 import "./MembershipSelector.css";
 
 // adding a tier updates the menu automatically
-const filterOptions = [
-  { value: "all", label: "All tiers" },
-  ...membershipTiers.map((tier) => ({ value: tier.id, label: tier.label })),
+const menuOptions = [
+  { value: "", label: "Choose a membership..." },
+  ...membershipTiers.map((tier) => ({ value: tier.id, label: tier.title })),
 ];
 
 export default function MembershipSelector({ onSignUp }) {
-  // "" means nothing selected
-  // The parent owns the selection; each ToggleOption is controlled.
+  // The parent owns the selection; the dropdown and each ToggleOption
+  // are controlled by it. "" means nothing selected.
   const [selectedTierId, setSelectedTierId] = useState("");
 
   const selectedTier = membershipTiers.find((t) => t.id === selectedTierId);
