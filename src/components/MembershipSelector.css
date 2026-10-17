@@ -1,0 +1,113 @@
+.membership-selector {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.membership-selector__options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.toggle-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: 2px solid #d0d5dd;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.toggle-option:hover {
+  border-color: #98a2b3;
+}
+
+.toggle-option--selected {
+  border-color: #0e7490;
+  box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.2);
+}
+
+/* Visually hidden but still focusable and screen-reader accessible */
+.toggle-option__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.toggle-option:has(.toggle-option__input:focus-visible) {
+  outline: 3px solid #0e7490;
+  outline-offset: 2px;
+}
+
+.toggle-option__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.toggle-option__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.toggle-option__price {
+  font-weight: 600;
+  color: #0e7490;
+}
+
+.toggle-option__text {
+  color: #475467;
+}
+
+.toggle-option__features {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: #344054;
+  font-size: 0.95rem;
+}
+
+.membership-selector__button {
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 0.75rem 2.5rem;
+  border: none;
+  border-radius: 8px;
+  background: #0e7490;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.membership-selector__button:disabled {
+  background: #d0d5dd;
+  color: #667085;
+  cursor: not-allowed;
+}
+
+.toggle-option {
+  /* ...existing rules... */
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    opacity 0.2s,
+    filter 0.2s;
+}
+
+.toggle-option--dimmed {
+  opacity: 0.45;
+  filter: grayscale(0.6);
+}
+
+.toggle-option--dimmed:hover {
+  opacity: 0.75;
+}
