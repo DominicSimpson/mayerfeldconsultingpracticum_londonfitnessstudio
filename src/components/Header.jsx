@@ -5,16 +5,12 @@ function Header() {
 
   return (
     <header
-      className="grid grid-cols-[1fr_auto_1fr] items-center p-4 gap-y-4 bg-header
-      [grid-template-areas:'logo_title_._'_'nav_nav_nav']
-      max-[600px]:grid-cols-[auto_minmax(0,1fr)]
-      max-[600px]:[grid-template-areas:'logo_title'_'nav_nav']"
+      className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-y-4 p-4 bg-header
+      [grid-template-areas:'logo_title'_'nav_nav']
+      sm:grid-cols-[1fr_auto_1fr]
+      sm:[grid-template-areas:'logo_title_._'_'nav_nav_nav']"
     >
-      <a
-        href="/"
-        className="[grid-area:logo] justify-self-start p-5
-      max-[600px]:p-2.5"
-      >
+      <a href="/" className="[grid-area:logo] justify-self-start p-2.5 sm:p-5">
         <img
           className="h-20 w-auto block"
           src={logo}
@@ -22,8 +18,9 @@ function Header() {
         />
       </a>
       <h1
-        className="[grid-area:title] font-display text-[length:clamp(2rem,6vw,5rem)] 
-      max-[600px]:text-[length:clamp(1.5rem,7vw,2rem)] max-[600px]:text-left text-center"
+        className="[grid-area:title] font-display text-left 
+        text-[length:clamp(1.5rem,7vw,2rem)] 
+        sm:text-center sm:text-[length:clamp(2rem,6vw,5rem)]"
       >
         London Fitness Studio
       </h1>
@@ -32,7 +29,7 @@ function Header() {
           <a
             key={label}
             href="#"
-            className="font-bold text-nav-text hover:underline mx-2 sm:mx-6 text-2xl"
+            className="text-lg mx-2 font-bold text-nav-text hover:underline sm:text-[1.65rem] sm:mx-6"
           >
             {label}
           </a>
