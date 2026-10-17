@@ -3,6 +3,7 @@ import Services from "./components/Services";
 import Footer from "./components/Footer";
 import studioPhoto from "./assets/london_fitness_studio_photo.jpg";
 import Paragraph from "./components/Paragraph";
+import Membership from "./components/Membership";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         </section>
 
         <Services />
+        <Membership />
       </main>
 
       <Footer />
