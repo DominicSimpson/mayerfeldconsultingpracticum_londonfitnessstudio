@@ -1,5 +1,8 @@
 import Paragraph from "./Paragraph.jsx";
 import londonFitnessStudioPhoto from "../assets/images/fitnessclasses_photo.jpg";
+import londonZumbaClassesPhoto from "../assets/images/zumbaclasses_photo.jpg";
+import londonNutritionCounsellingPhoto from "../assets/images/nutritioncounselling_photo.jpg";
+import londonWellnessProgramsPhoto from "../assets/images/wellnessprograms_photo.jpg";
 
 const services = [
   {
@@ -10,14 +13,17 @@ const services = [
   {
     title: "Zumba Classes",
     text: "High-energy dance workouts that feel more like a party.",
+    img: londonZumbaClassesPhoto,
   },
   {
     title: "Nutrition Counselling",
     text: "One-to-one guidance to fuel your training and lifestyle.",
+    img: londonNutritionCounsellingPhoto,
   },
   {
     title: "Wellness Programs",
     text: "Stress management, recovery and mindfulness programmes.",
+    img: londonWellnessProgramsPhoto,
   },
 ];
 
