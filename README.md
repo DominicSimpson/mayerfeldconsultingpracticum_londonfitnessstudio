@@ -1,5 +1,7 @@
 # Mayerfeld Consulting Practicum
 
+<img width="1920" height="869" alt="londonfitnessstudio_screenshot" src="https://github.com/user-attachments/assets/4e7af53e-3dec-4727-981e-e02b71c28758" />
+<br>
 This site is the assignment that I have been given as part of [Mayerfeld Consulting's Front-End Practicum Program](https://www.mayerfeld.consulting/frontend-developer-practicum) in October 2026. The project involves building a front-end website for an imaginary fitness studio, which I have named London Fitness Studio.
 
 The site must obey the following specifications:
