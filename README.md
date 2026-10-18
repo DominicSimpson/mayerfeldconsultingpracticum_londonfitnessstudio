@@ -1,19 +1,18 @@
-# React + Vite
+# Mayerfeld Consulting Practicum
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This site is the assignment that I have been given as part of [Mayerfeld Consulting's Front-End Practicum Program](https://www.mayerfeld.consulting/frontend-developer-practicum) in October 2026. The project involves building a front-end website for an imaginary fitness studio, which I have named London Fitness Studio.
 
-Currently, two official plugins are available:
+The site must obey the following specifications:
+- [x] Scaffolded with Vite + React inside the existing repo
+- [x] Componentized: header, main content, footer, etc each their own component
+- [x] Tailwind fully wired in, old styles.css removed (the index.css file that remains is essential for the app to function and contains basic root elements)
+- [x] Resposive classes rewritten mobile-first (unprefixed: sm:/md:/lg:)
+- [x] Listed items in one data file (array of objects)
+- [x] One real filter on my main grid, built with useState
+- [x] One small controlled component reused per item (toggle/filter)
+- [x] Small, regular commits
+- [x] No horizontal scroll on any screen size
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
