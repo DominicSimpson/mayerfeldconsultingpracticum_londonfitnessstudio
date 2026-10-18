@@ -13,11 +13,15 @@ export default function MembershipSelector({ onSignUp }) {
   // The parent owns the selection; the dropdown and each ToggleOption
   // are controlled by it. "" means nothing selected.
   const [selectedTierId, setSelectedTierId] = useState("");
-
+  const [query, setQuery] = useState("");
   const selectedTier = membershipTiers.find((t) => t.id === selectedTierId);
+  const visibleTiers = membershipTiers.filter((tier) =>
+    tier.title.toLowerCase().includes(query.toLowerCase()),
+  );
+  const selectedIsVisible = visibleTiers.some((t) => t.id === selectedTierId);
 
   function handleSignUp() {
-    if (!selectedTier) return;
+    if (!selectedTier || !selectedIsVisible) return;
     // Replace with your real sign-up flow (route, API call, modal, etc.)
     if (onSignUp) {
       onSignUp(selectedTier);
@@ -36,12 +40,20 @@ export default function MembershipSelector({ onSignUp }) {
         options={menuOptions}
       />
 
+      <input
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Filter memberships..."
+        aria-label="Filter memberships"
+      />
+
       <div
         className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4"
         role="radiogroup"
         aria-label="Membership options"
       >
-        {membershipTiers.map((tier) => (
+        {visibleTiers.map((tier) => (
           <ToggleOption
             key={tier.id}
             name="membership"
@@ -62,9 +74,9 @@ export default function MembershipSelector({ onSignUp }) {
         className="block mt-6 py-3 px-10 mx-auto font-semibold text-base text-white 
         bg-sign-up-button rounded-lg cursor-pointer enabled:hover:brightness-110
         focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
-        disabled-bg-gray-300 disabled-text-gray-500 disabled:cursor-not-allowed"
+        disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
         onClick={handleSignUp}
-        disabled={!selectedTier}
+        disabled={!selectedTier || !selectedIsVisible}
       >
         Sign Up
       </button>
