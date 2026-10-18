@@ -2,7 +2,6 @@ import { useState } from "react";
 import ToggleOption from "./ToggleOption.jsx";
 import FilterMenu from "./FilterMenu.jsx";
 import membershipTiers from "../data/membershipTiers";
-import "./MembershipSelector.css";
 
 // adding a tier updates the menu automatically
 const menuOptions = [
@@ -28,7 +27,7 @@ export default function MembershipSelector({ onSignUp }) {
   }
 
   return (
-    <section className="membership-selector">
+    <section className="w-full max-w-250 mx-auto flex flex-col gap-4">
       <FilterMenu
         id="tier-menu"
         label="Membership:"
@@ -38,7 +37,7 @@ export default function MembershipSelector({ onSignUp }) {
       />
 
       <div
-        className="membership-selector__options"
+        className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4"
         role="radiogroup"
         aria-label="Membership options"
       >
@@ -60,7 +59,10 @@ export default function MembershipSelector({ onSignUp }) {
 
       <button
         type="button"
-        className="membership-selector__button"
+        className="block mt-6 py-3 px-10 mx-auto font-semibold text-base text-white 
+        bg-sign-up-button rounded-lg cursor-pointer enabled:hover:brightness-110
+        focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
+        disabled-bg-gray-300 disabled-text-gray-500 disabled:cursor-not-allowed"
         onClick={handleSignUp}
         disabled={!selectedTier}
       >

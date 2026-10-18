@@ -1,9 +1,11 @@
 import Paragraph from "./Paragraph.jsx";
+import londonFitnessStudioPhoto from "../assets/images/fitnessclasses_photo.jpg";
 
 const services = [
   {
     title: "Fitness Classes",
     text: "Strength, cardio and conditioning sessions for all levels.",
+    img: londonFitnessStudioPhoto,
   },
   {
     title: "Zumba Classes",
@@ -31,6 +33,13 @@ function Services() {
           hover:shadow-[0_2px_4px_rgba(60,30,30,0.14),0_12px_24px_rgba(60,30,30,0.18)]"
           key={service.title}
         >
+          {service.img && (
+            <img
+              src={service.img}
+              alt={service.title}
+              className="w-full h-48 object-cover rounded-md"
+            />
+          )}
           <h2 className="font-service-card text-xl font-bold">
             {service.title}
           </h2>

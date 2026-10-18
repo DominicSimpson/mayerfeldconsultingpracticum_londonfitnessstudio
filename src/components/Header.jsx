@@ -1,4 +1,4 @@
-import logo from "../assets/lfs_logo.png";
+import logo from "../assets/logo/lfs_logo.png";
 
 function Header() {
   const links = ["Home", "About", "Services", "Contact"];
