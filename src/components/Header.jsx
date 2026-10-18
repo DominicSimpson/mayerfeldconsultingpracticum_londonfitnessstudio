@@ -1,7 +1,10 @@
+import { useState } from "react";
 import logo from "../assets/logo/lfs_logo.png";
+import Hamburger from "hamburger-react";
 
 function Header() {
   const links = ["Home", "About", "Services", "Contact"];
+  const [isOpen, setOpen] = useState(false);
 
   return (
     <header
@@ -24,11 +27,26 @@ function Header() {
       >
         London Fitness Studio
       </h1>
-      <nav className="[grid-area:nav] font-serif flex justify-center items-center flex-wrap gap-4 p-4">
+
+      <div className="[grad-area:menu] justify-self-end sm:hidden">
+        <Hamburger
+          toggled={isOpen}
+          toggle={setOpen}
+          label="Show menu"
+          size={24}
+        />
+      </div>
+
+      <nav
+        className={`[grid-area:nav] font-serif flex-col items-center gap-4 p-4
+        ${isOpen ? "flex" : "hidden"}
+        sm:flex sm:flex-row sm:justify-center sm:flex-wrap`}
+      >
         {links.map((label) => (
           <a
             key={label}
             href="#"
+            onClick={() => setOpen(false)}
             className="text-lg mx-2 font-bold text-nav-text hover:underline sm:text-[1.65rem] sm:mx-6"
           >
             {label}
