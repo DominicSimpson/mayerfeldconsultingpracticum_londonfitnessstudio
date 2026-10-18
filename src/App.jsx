@@ -2,7 +2,7 @@ import Header from "./components/Header";
 import Services from "./components/Services";
 import Membership from "./components/Membership";
 import Footer from "./components/Footer";
-import studioPhoto from "./assets/london_fitness_studio_photo.jpg";
+import studioPhoto from "./assets/images/london_fitness_studio_photo.jpg";
 import Paragraph from "./components/Paragraph";
 
 function App() {
