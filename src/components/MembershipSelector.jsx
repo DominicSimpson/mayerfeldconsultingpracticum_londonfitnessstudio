@@ -36,7 +36,10 @@ export default function MembershipSelector({ onSignUp }) {
         id="tier-menu"
         label="Membership:"
         value={selectedTierId}
-        onChange={setSelectedTierId}
+        onChange={(id) => {
+          setSelectedTierId(id);
+          setQuery("");
+        }}
         options={menuOptions}
       />
 

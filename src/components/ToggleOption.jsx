@@ -27,7 +27,7 @@ export default function ToggleOption({
     : "border-card-border hover:border-gray-400";
 
   const dimmedClasses = dimmed
-    ? "opacity-45 grayscale-[0.6] pointer-events-none cursor-default"
+    ? "opacity-45 grayscale-[0.6] hover:opacity-100 hover:grayscale-0 focus-within:opacity-100 focus-within:grayscale-0"
     : "";
 
   return (
@@ -38,13 +38,12 @@ export default function ToggleOption({
         name={name}
         value={value}
         checked={selected}
-        disabled={dimmed}
         onChange={() => onChange(value)}
       />
 
       <span className="flex justify-between items-baseline">
         <span className="font-service-card text-xl font-bold">{title}</span>
-        {price && (
+        {price != null && (
           <span className="font-semibold text-sign-up-button">{price}</span>
         )}
       </span>
