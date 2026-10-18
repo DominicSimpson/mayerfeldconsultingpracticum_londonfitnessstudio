@@ -13,7 +13,10 @@ function Header() {
       sm:grid-cols-[1fr_auto_1fr]
       sm:[grid-template-areas:'logo_title_._'_'nav_nav_nav']"
     >
-      <a href="/" className="[grid-area:logo] justify-self-start p-2.5 sm:p-5">
+      <a
+        href={import.meta.env.BASE_URL}
+        className="[grid-area:logo] justify-self-start p-2.5 sm:p-5"
+      >
         <img
           className="h-20 w-auto block"
           src={logo}
