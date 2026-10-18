@@ -9,7 +9,7 @@ The site must obey the following specifications:
 - [x] Scaffolded with Vite + React inside the existing repo
 - [x] Componentized: header, main content, footer, etc each their own component
 - [x] Tailwind fully wired in, old styles.css removed (the index.css file that remains is essential for the app to function and contains basic root elements)
-- [x] Resposive classes rewritten mobile-first (unprefixed: sm:/md:/lg:)
+- [x] Responsive classes rewritten mobile-first (unprefixed: sm:/md:/lg:)
 - [x] Listed items in one data file (array of objects)
 - [x] One real filter on my main grid, built with useState
 - [x] One small controlled component reused per item (toggle/filter)
