@@ -1,8 +1,8 @@
 import Paragraph from "./Paragraph.jsx";
-import londonFitnessStudioPhoto from "../assets/images/fitnessclasses_photo.jpg";
-import londonZumbaClassesPhoto from "../assets/images/zumbaclasses_photo.jpg";
-import londonNutritionCounsellingPhoto from "../assets/images/nutritioncounselling_photo.jpg";
-import londonWellnessProgramsPhoto from "../assets/images/wellnessprograms_photo.jpg";
+import londonFitnessStudioPhoto from "../assets/images/london_fitness_studio_photo.jpg";
+import swimmingPoolPhoto from "../assets/images/swimmingpool_photo.jpg";
+import saunaPhoto from "../assets/images/sauna_photo.jpg";
+import sportsCourtsPhoto from "../assets/images/sportscourts_photo.jpg";
 
 const facilities = [
   {
@@ -13,17 +13,17 @@ const facilities = [
   {
     title: "Swimming Pools",
     text: "Swim laps in our main pool or let the little ones splash safely in our dedicated children's pool.",
-    img: londonZumbaClassesPhoto,
+    img: swimmingPoolPhoto,
   },
   {
     title: "Sauna and steam rooms",
     text: "Unwind after your workout in our sauna, spa, and steam rooms, the perfect way to ease tired muscles.",
-    img: londonNutritionCounsellingPhoto,
+    img: saunaPhoto,
   },
   {
     title: "Sports courts",
     text: "Book a court for badminton, tennis, or indoor football, whether you're playing with friends or joining a game.",
-    img: londonWellnessProgramsPhoto,
+    img: sportsCourtsPhoto,
   },
 ];
 
