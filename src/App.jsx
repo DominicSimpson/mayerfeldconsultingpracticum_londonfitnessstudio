@@ -26,8 +26,7 @@ function App() {
             wellness services to help you achieve your health goals.
           </Paragraph>
           <Paragraph>
-            Click on our navigation links to learn more about our offerings,
-            including:
+            Click on our navigation links to learn more about us.
           </Paragraph>
         </section>
 
