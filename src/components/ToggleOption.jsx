@@ -64,30 +64,25 @@ export default function ToggleOption({
         )}
       </label>
 
-      {onQuantityChange &&
-        (quantity === 0 ? (
-          <button
-            type="button"
-            onClick={() => onQuantityChange(1)}
-            aria-label={`Add ${title} to cart`}
-            className="mt-2 self-start py-1 px-3 text-sm rounded-lg font-semibold text-white bg-sign-up-button
-            cursor-pointer hover:brightness-100
-            focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
-          >
+      {onQuantityChange && (
+        <div
+          role="group"
+          aria-label={`${title} quantity`}
+          className="mt-2 self-stretch flex items-center justify-between gap-3"
+        >
+          <span className="text-sm font-semibold text-nav-text">
             Add to Cart
-          </button>
-        ) : (
-          <div
-            role="group"
-            aria-label={`${title} quantity`}
-            className="mt-2 self-start inline-flex items-center rounded-lg bg-sign-up-button text-white text-sm font-semibold"
-          >
+          </span>
+
+          <div className="mt-2 self-start inline-flex items-center rounded-lg bg-black text-white text-sm font-semibold">
             <button
               type="button"
               onClick={() => onQuantityChange(-1)}
               aria-label={`Decrease ${title} quantity`}
-              className="py-1 px-3 cursor-pointer rounded-l-lg hover:brightness-110
-                focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
+              disabled={quantity <= 0}
+              className="py-1 px-3 rounded-l-lg cursor-pointer enabled:hover:brightness-110
+                focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
+                disabled:opacity-40 disabled:cursor-not-allowed"
             >
               -
             </button>
@@ -95,17 +90,19 @@ export default function ToggleOption({
             <span aria-live="polite" className="min-w-6 text-center">
               {quantity}
             </span>
+
             <button
               type="button"
               onClick={() => onQuantityChange(1)}
               aria-label={`Increase ${title} quantity`}
-              className="py-1 px-3 cursor-pointer rounded-r-lg hover:brightness-110
-          focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
+              className="py-1 px-3 rounded-r-lg cursor-pointer hover:brightness-110
+                focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
             >
               +
             </button>
           </div>
-        ))}
+        </div>
+      )}
     </div>
   );
 }
