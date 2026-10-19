@@ -16,8 +16,8 @@ export default function ToggleOption({
   price,
   description,
   features = [],
-  onAddToCart,
-  inCart = false,
+  quantity = 0,
+  onQuantityChange,
 }) {
   const base =
     "relative flex flex-col gap-3 p-6 rounded-lg border-2 bg-card cursor-pointer " +
@@ -33,8 +33,8 @@ export default function ToggleOption({
     : "";
 
   return (
-    <>
-      <label className={`${base} ${stateClasses} ${dimmedClasses}`}>
+    <div className={`${base} ${stateClasses} ${dimmedClasses}`}>
+      <label className="flex flex-col gap-3 flex-1 cursor-pointer">
         <input
           className="sr-only"
           type="radio"
@@ -64,20 +64,48 @@ export default function ToggleOption({
         )}
       </label>
 
-      {onAddToCart && (
-        <button
-          type="button"
-          onClick={onAddToCart}
-          disabled={inCart}
-          aria-label={`Add ${title} to cart`}
-          className="mt-2 self-start py-1 px-3 text-sm rounded-lg font-semibold text-white bg-sign-up-button
-        cursor-pointer enabled:hover:brightness-100
-        focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
-        disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
-        >
-          {inCart ? "In Cart" : "Add to Cart"}
-        </button>
-      )}
-    </>
+      {onQuantityChange &&
+        (quantity === 0 ? (
+          <button
+            type="button"
+            onClick={() => onQuantityChange(1)}
+            aria-label={`Add ${title} to cart`}
+            className="mt-2 self-start py-1 px-3 text-sm rounded-lg font-semibold text-white bg-sign-up-button
+            cursor-pointer hover:brightness-100
+            focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
+          >
+            Add to Cart
+          </button>
+        ) : (
+          <div
+            role="group"
+            aria-label={`${title} quantity`}
+            className="mt-2 self-start inline-flex items-center rounded-lg bg-sign-up-button text-white text-sm font-semibold"
+          >
+            <button
+              type="button"
+              onClick={() => onQuantityChange(-1)}
+              aria-label={`Decrease ${title} quantity`}
+              className="py-1 px-3 cursor-pointer rounded-l-lg hover:brightness-110
+                focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
+            >
+              -
+            </button>
+
+            <span aria-live="polite" className="min-w-6 text-center">
+              {quantity}
+            </span>
+            <button
+              type="button"
+              onClick={() => onQuantityChange(1)}
+              aria-label={`Increase ${title} quantity`}
+              className="py-1 px-3 cursor-pointer rounded-r-lg hover:brightness-110
+          focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
+            >
+              +
+            </button>
+          </div>
+        ))}
+    </div>
   );
 }
