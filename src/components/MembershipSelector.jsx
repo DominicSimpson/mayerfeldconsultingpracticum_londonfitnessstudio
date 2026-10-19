@@ -14,6 +14,7 @@ export default function MembershipSelector({ onSignUp }) {
   // are controlled by it. "" means nothing selected.
   const [selectedTierId, setSelectedTierId] = useState("");
   const [query, setQuery] = useState("");
+  const [cartItems, setCartItems] = useState([]);
   const selectedTier = membershipTiers.find((t) => t.id === selectedTierId);
   const visibleTiers = membershipTiers.filter((tier) =>
     tier.title.toLowerCase().includes(query.toLowerCase()),
@@ -28,6 +29,12 @@ export default function MembershipSelector({ onSignUp }) {
     } else {
       console.log("Signing up for:", selectedTier.title);
     }
+  }
+
+  function addToCart(tier) {
+    setCartItems((prev) =>
+      prev.some((item) => item.id === tier.id) ? prev : [...prev, tier],
+    );
   }
 
   return (
@@ -68,8 +75,25 @@ export default function MembershipSelector({ onSignUp }) {
             price={tier.price}
             description={tier.text}
             features={tier.features}
+            onAddToCart={() => addToCart(tier)}
+            inCart={cartItems.some((item) => item.id === tier.id)}
           />
         ))}
+      </div>
+
+      <div className="cart">
+        <h2>Your Cart</h2>
+        {cartItems.length === 0 ? (
+          <div>Cart is empty</div>
+        ) : (
+          <ul>
+            {cartItems.map((item) => (
+              <li key={item.id}>
+                {item.name} - {item.price} x {item.quantity}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <button
