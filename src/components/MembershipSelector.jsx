@@ -31,10 +31,24 @@ export default function MembershipSelector({ onSignUp }) {
     }
   }
 
-  function addToCart(tier) {
-    setCartItems((prev) =>
-      prev.some((item) => item.id === tier.id) ? prev : [...prev, tier],
-    );
+  const MAX_QUANTITY = 10;
+
+  function changeQuantity(tier, delta) {
+    setCartItems((prev) => {
+      const existing = prev.find((item) => item.id === tier.id);
+
+      if (!existing) {
+        return delta > 0 ? [...prev, { ...tier, quantity: 1 }] : prev;
+      }
+
+      const newQuantity = Math.min(existing.quantity + delta, MAX_QUANTITY);
+      if (newQuantity <= 0) {
+        return prev.filter((item) => item.id !== tier.id);
+      }
+      return prev.map((item) =>
+        item.id === tier.id ? { ...item, quantity: newQuantity } : item,
+      );
+    });
   }
 
   return (
@@ -77,6 +91,10 @@ export default function MembershipSelector({ onSignUp }) {
             features={tier.features}
             onAddToCart={() => addToCart(tier)}
             inCart={cartItems.some((item) => item.id === tier.id)}
+            quantity={
+              cartItems.find((item) => item.id === tier.id)?.quantity ?? 0
+            }
+            onQuantityChange={(delta) => changeQuantity(tier, delta)}
           />
         ))}
       </div>
@@ -89,7 +107,7 @@ export default function MembershipSelector({ onSignUp }) {
           <ul>
             {cartItems.map((item) => (
               <li key={item.id}>
-                {item.name} - {item.price} x {item.quantity}
+                {item.title} - {item.price} x {item.quantity}
               </li>
             ))}
           </ul>

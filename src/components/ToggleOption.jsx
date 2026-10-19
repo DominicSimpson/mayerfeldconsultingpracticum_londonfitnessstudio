@@ -70,7 +70,7 @@ export default function ToggleOption({
           onClick={onAddToCart}
           disabled={inCart}
           aria-label={`Add ${title} to cart`}
-          className="mt-2 py-2 px-4 rounded-lg font-semibold text-white bg-sign-up-button
+          className="mt-2 self-start py-1 px-3 text-sm rounded-lg font-semibold text-white bg-sign-up-button
         cursor-pointer enabled:hover:brightness-100
         focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
         disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
