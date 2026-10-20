@@ -2,6 +2,7 @@ import { useState } from "react";
 import ToggleOption from "./ToggleOption.jsx";
 import FilterMenu from "./FilterMenu.jsx";
 import membershipTiers from "../data/membershipTiers";
+import Paragraph from "./Paragraph.jsx";
 
 // adding a tier updates the menu automatically
 const menuOptions = [
@@ -94,8 +95,6 @@ export default function MembershipSelector({ onSignUp }) {
             price={`£${tier.price}`}
             description={tier.text}
             features={tier.features}
-            onAddToCart={() => addToCart(tier)}
-            inCart={cartItems.some((item) => item.id === tier.id)}
             quantity={
               cartItems.find((item) => item.id === tier.id)?.quantity ?? 0
             }
@@ -104,20 +103,29 @@ export default function MembershipSelector({ onSignUp }) {
         ))}
       </div>
 
-      <div className="cart">
-        <h2>Your Cart</h2>
+      <div
+        className="w-full border-black/35 rounded-lg flex flex-col relative gap-3 p-6 border-2 bg-card 
+          transition-[border-color,box-shadow,opacity,filter] duration-200"
+      >
+        <h2 className="font-service-card text-2xl font-bold text-center">
+          Your Cart
+        </h2>
         {cartItems.length === 0 ? (
-          <div>Cart is empty</div>
+          <Paragraph>Cart is empty</Paragraph>
         ) : (
-          <ul>
-            {cartItems.map((item) => (
-              <li key={item.id}>
-                {item.title} - {item.price} x {item.quantity}
-                <p>Total Items: {totalItems}</p>
-                <p>Total: £{totalPrice.toFixed(2)}</p>
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul>
+              {cartItems.map((item) => (
+                <li key={item.id}>
+                  <Paragraph>
+                    {item.title}: £{item.price} x {item.quantity}
+                  </Paragraph>
+                </li>
+              ))}
+            </ul>
+            <Paragraph>Total items: {totalItems}</Paragraph>
+            <Paragraph>Total: £{totalPrice.toFixed(2)}</Paragraph>
+          </>
         )}
       </div>
 

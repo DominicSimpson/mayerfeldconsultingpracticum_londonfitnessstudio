@@ -1,3 +1,5 @@
+import Paragraph from "./Paragraph";
+
 const openingHoursData = [
   { id: 1, day: "Monday", openingHours: "8:00-22:00" },
   { id: 2, day: "Tuesday", openingHours: "8:00-22:00" },
@@ -26,17 +28,16 @@ function OpeningTimes() {
           width: "100%",
           border: "1px solid #ddd",
         }}
-      >
+      />
+
+      <table className="w-full border-collapse border border-gray-300 font-p-text">
         <thead>
           <tr>
             {columns.map((column) => (
               <th
                 key={column.accessor}
-                style={{
-                  border: "1px solid #ddd",
-                  padding: "8px",
-                  textAlign: "left",
-                }}
+                scope="col"
+                className="border border-gray-300 p-2 text-left"
               >
                 {column.header}
               </th>
