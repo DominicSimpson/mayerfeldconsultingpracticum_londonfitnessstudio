@@ -15,6 +15,11 @@ export default function MembershipSelector({ onSignUp }) {
   const [selectedTierId, setSelectedTierId] = useState("");
   const [query, setQuery] = useState("");
   const [cartItems, setCartItems] = useState([]);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
   const selectedTier = membershipTiers.find((t) => t.id === selectedTierId);
   const visibleTiers = membershipTiers.filter((tier) =>
     tier.title.toLowerCase().includes(query.toLowerCase()),
@@ -86,7 +91,7 @@ export default function MembershipSelector({ onSignUp }) {
             dimmed={selectedTierId !== "" && tier.id !== selectedTierId}
             onChange={setSelectedTierId}
             title={tier.title}
-            price={tier.price}
+            price={`£${tier.price}`}
             description={tier.text}
             features={tier.features}
             onAddToCart={() => addToCart(tier)}
@@ -108,6 +113,8 @@ export default function MembershipSelector({ onSignUp }) {
             {cartItems.map((item) => (
               <li key={item.id}>
                 {item.title} - {item.price} x {item.quantity}
+                <p>Total Items: {totalItems}</p>
+                <p>Total: £{totalPrice.toFixed(2)}</p>
               </li>
             ))}
           </ul>
