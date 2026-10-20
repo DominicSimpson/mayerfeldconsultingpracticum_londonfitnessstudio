@@ -2,7 +2,7 @@ const membershipTiers = [
   {
     id: "basic",
     title: "Basic",
-    price: "£25/month",
+    price: 25,
     text: "Swimming pool access off-peak, plus pay-as-you-go classes at member rates.",
     features: [
       "Swimming pool (off-peak)",
@@ -13,7 +13,7 @@ const membershipTiers = [
   {
     id: "intermediate",
     title: "Intermediate",
-    price: "£45/month",
+    price: 45,
     text: "Gym, pool and sauna off-peak, with a monthly allowance of group classes.",
     features: [
       "Gym, swimming pool and sauna (off-peak)",
@@ -25,7 +25,7 @@ const membershipTiers = [
   {
     id: "gold",
     title: "Gold",
-    price: "£70/month",
+    price: 70,
     text: "Unlimited access to every facility, class and wellness service at any time.",
     features: [
       "All facilities, any time (gym, pool, sauna)",

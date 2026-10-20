@@ -16,6 +16,8 @@ export default function ToggleOption({
   price,
   description,
   features = [],
+  quantity = 0,
+  onQuantityChange,
 }) {
   const base =
     "relative flex flex-col gap-3 p-6 rounded-lg border-2 bg-card cursor-pointer " +
@@ -31,34 +33,76 @@ export default function ToggleOption({
     : "";
 
   return (
-    <label className={`${base} ${stateClasses} ${dimmedClasses}`}>
-      <input
-        className="sr-only"
-        type="radio"
-        name={name}
-        value={value}
-        checked={selected}
-        onChange={() => onChange(value)}
-      />
+    <div className={`${base} ${stateClasses} ${dimmedClasses}`}>
+      <label className="flex flex-col gap-3 flex-1 cursor-pointer">
+        <input
+          className="sr-only"
+          type="radio"
+          name={name}
+          value={value}
+          checked={selected}
+          onChange={() => onChange(value)}
+        />
 
-      <span className="flex justify-between items-baseline">
-        <span className="font-service-card text-xl font-bold">{title}</span>
-        {price != null && (
-          <span className="font-semibold text-sign-up-button">{price}</span>
+        <span className="flex justify-between items-baseline">
+          <span className="font-service-card text-xl font-bold">{title}</span>
+          {price != null && (
+            <span className="font-semibold text-sign-up-button">{price}</span>
+          )}
+        </span>
+
+        {description && (
+          <span className="font-p-text text-gray-600">{description}</span>
         )}
-      </span>
 
-      {description && (
-        <span className="font-p-text text-gray-600">{description}</span>
-      )}
+        {features.length > 0 && (
+          <ul className="list-disc pl-5 text-sm text-nav-text">
+            {features.map((feature) => (
+              <li key={feature}>{feature}</li>
+            ))}
+          </ul>
+        )}
+      </label>
 
-      {features.length > 0 && (
-        <ul className="list-disc pl-5 text-sm text-nav-text">
-          {features.map((feature) => (
-            <li key={feature}>{feature}</li>
-          ))}
-        </ul>
+      {onQuantityChange && (
+        <div
+          role="group"
+          aria-label={`${title} quantity`}
+          className="mt-2 self-stretch flex items-center justify-between gap-3"
+        >
+          <span className="text-sm font-semibold text-nav-text">
+            Add to Cart
+          </span>
+
+          <div className="mt-2 self-start inline-flex items-center rounded-lg bg-black text-white text-sm font-semibold">
+            <button
+              type="button"
+              onClick={() => onQuantityChange(-1)}
+              aria-label={`Decrease ${title} quantity`}
+              disabled={quantity <= 0}
+              className="py-1 px-3 rounded-l-lg cursor-pointer enabled:hover:brightness-110
+                focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
+                disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              -
+            </button>
+
+            <span aria-live="polite" className="min-w-6 text-center">
+              {quantity}
+            </span>
+
+            <button
+              type="button"
+              onClick={() => onQuantityChange(1)}
+              aria-label={`Increase ${title} quantity`}
+              className="py-1 px-3 rounded-r-lg cursor-pointer hover:brightness-110
+                focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
+            >
+              +
+            </button>
+          </div>
+        </div>
       )}
-    </label>
+    </div>
   );
 }
