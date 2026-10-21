@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Abril Fatface", cursive;
+  --font-serif: "Playfair Display", serif;
+  --font-service-card: "Roboto", sans-serif;
+  --font-p-text: "Google Sans Flex", sans-serif;
+
+  --color-header: #19b0ec;
+  --color-footer: #876464;
+  --color-main: #efe3e3;
+  --color-card: #ffffff;
+  --color-card-border: #d9c7c7;
+  --color-nav-text: #0b2540;
+  --color-sign-up-button: #0e7490;
+}
+
