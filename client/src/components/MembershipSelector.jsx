@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ToggleOption from "./ToggleOption.jsx";
 import FilterMenu from "./FilterMenu.jsx";
-import membershipTiers from "../data/membershipTiers";
+import membershipTiers from "../../../server/data/membershipTiers";
 import Paragraph from "./Paragraph.jsx";
 
 // adding a tier updates the menu automatically
@@ -15,12 +15,7 @@ export default function MembershipSelector({ onSignUp }) {
   // are controlled by it. "" means nothing selected.
   const [selectedTierId, setSelectedTierId] = useState("");
   const [query, setQuery] = useState("");
-  const [cartItems, setCartItems] = useState([]);
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
+
   const selectedTier = membershipTiers.find((t) => t.id === selectedTierId);
   const visibleTiers = membershipTiers.filter((tier) =>
     tier.title.toLowerCase().includes(query.toLowerCase()),
@@ -35,26 +30,6 @@ export default function MembershipSelector({ onSignUp }) {
     } else {
       console.log("Signing up for:", selectedTier.title);
     }
-  }
-
-  const MAX_QUANTITY = 10;
-
-  function changeQuantity(tier, delta) {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === tier.id);
-
-      if (!existing) {
-        return delta > 0 ? [...prev, { ...tier, quantity: 1 }] : prev;
-      }
-
-      const newQuantity = Math.min(existing.quantity + delta, MAX_QUANTITY);
-      if (newQuantity <= 0) {
-        return prev.filter((item) => item.id !== tier.id);
-      }
-      return prev.map((item) =>
-        item.id === tier.id ? { ...item, quantity: newQuantity } : item,
-      );
-    });
   }
 
   return (
