@@ -3,6 +3,8 @@ import londonFitnessStudioPhoto from "../assets/images/fitnessclasses_photo.jpg"
 import londonZumbaClassesPhoto from "../assets/images/zumbaclasses_photo.jpg";
 import londonNutritionCounsellingPhoto from "../assets/images/nutritioncounselling_photo.jpg";
 import londonWellnessProgramsPhoto from "../assets/images/wellnessprograms_photo.jpg";
+import DatePicker, { today } from "./DatePicker.jsx";
+import { useState } from "react";
 
 const services = [
   {
@@ -28,6 +30,8 @@ const services = [
 ];
 
 function Services() {
+  const [selectedDate, setSelectedDate] = useState(today);
+
   return (
     <section className="w-full border border-black/35 rounded-lg p-6 flex flex-col gap-6">
       <h2 className="font-service-card text-2xl font-bold text-center">
@@ -63,6 +67,7 @@ function Services() {
           </article>
         ))}
       </div>
+      <DatePicker value={selectedDate} onChange={setSelectedDate} />
     </section>
   );
 }

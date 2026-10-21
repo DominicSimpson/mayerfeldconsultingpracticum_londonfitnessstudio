@@ -11,7 +11,7 @@ const fields = [
   },
   {
     name: "secondLineAddress",
-    label: "Address Line 2 (optional)",
+    label: "Address Line 2",
     fullWidth: true,
     optional: true,
     autoComplete: "address-line2",

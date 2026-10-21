@@ -3,6 +3,8 @@ import londonFitnessStudioPhoto from "../assets/images/london_fitness_studio_pho
 import swimmingPoolPhoto from "../assets/images/swimmingpool_photo.jpg";
 import saunaPhoto from "../assets/images/sauna_photo.jpg";
 import sportsCourtsPhoto from "../assets/images/sportscourts_photo.jpg";
+import DatePicker, { today } from "./DatePicker.jsx";
+import { useState } from "react";
 
 const facilities = [
   {
@@ -28,11 +30,14 @@ const facilities = [
 ];
 
 function Facilities() {
+  const [selectedDate, setSelectedDate] = useState(today);
+
   return (
     <section className="w-full border border-black/35 rounded-lg p-6 flex flex-col gap-6">
       <h2 className="font-service-card text-2xl font-bold text-center">
         Facilities
       </h2>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {facilities.map((facility) => (
           <article
@@ -63,6 +68,7 @@ function Facilities() {
           </article>
         ))}
       </div>
+      <DatePicker value={selectedDate} onChange={setSelectedDate} />
     </section>
   );
 }
