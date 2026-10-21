@@ -1,5 +1,3 @@
-import Paragraph from "./Paragraph";
-
 const openingHoursData = [
   { id: 1, day: "Monday", openingHours: "8:00-22:00" },
   { id: 2, day: "Tuesday", openingHours: "8:00-22:00" },
