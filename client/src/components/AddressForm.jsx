@@ -37,19 +37,24 @@ export default function AddressForm() {
 
   return (
     <div>
-      <h2>Address Form</h2>
       <form onSubmit={handleSubmit}>
         {fields.map(({ name, label, autoComplete }) => (
-          <div key={name}>
-            <label>
+          <div
+            key={name}
+            className="grid grid-cols-[8rem_1fr] items-center gap-3"
+          >
+            <label htmlFor={name} className="font-p-text">
               {label}:
               <input
+                id={name}
                 type="text"
-                name="firstName"
+                name={name}
                 value={formData[name]}
                 onChange={handleChange}
                 autoComplete={autoComplete}
                 required
+                className="w-full rounded-lg border-2 border-black/35 bg-white px-3 py-2
+                  focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
               />
             </label>
           </div>

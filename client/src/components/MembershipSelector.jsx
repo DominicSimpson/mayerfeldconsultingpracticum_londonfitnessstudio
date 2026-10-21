@@ -2,7 +2,6 @@ import { useState } from "react";
 import ToggleOption from "./ToggleOption.jsx";
 import FilterMenu from "./FilterMenu.jsx";
 import membershipTiers from "../../../server/data/membershipTiers";
-import Paragraph from "./Paragraph.jsx";
 import { useCart } from "./CartContext.jsx";
 
 // adding a tier updates the menu automatically
@@ -11,27 +10,16 @@ const menuOptions = [
   ...membershipTiers.map((tier) => ({ value: tier.id, label: tier.title })),
 ];
 
-export default function MembershipSelector({ onSignUp }) {
+export default function MembershipSelector() {
   // The parent owns the selection; the dropdown and each ToggleOption
   // are controlled by it. "" means nothing selected.
   const [selectedTierId, setSelectedTierId] = useState("");
   const [query, setQuery] = useState("");
+  const { cartItems, changeQuantity } = useCart();
 
-  const selectedTier = membershipTiers.find((t) => t.id === selectedTierId);
   const visibleTiers = membershipTiers.filter((tier) =>
     tier.title.toLowerCase().includes(query.toLowerCase()),
   );
-  const selectedIsVisible = visibleTiers.some((t) => t.id === selectedTierId);
-
-  function handleSignUp() {
-    if (!selectedTier || !selectedIsVisible) return;
-    // Replace with your real sign-up flow (route, API call, modal, etc.)
-    if (onSignUp) {
-      onSignUp(selectedTier);
-    } else {
-      console.log("Signing up for:", selectedTier.title);
-    }
-  }
 
   return (
     <section className="w-full max-w-250 mx-auto flex flex-col gap-4">
