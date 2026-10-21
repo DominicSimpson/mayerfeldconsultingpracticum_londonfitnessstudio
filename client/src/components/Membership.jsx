@@ -8,7 +8,7 @@ export function Membership() {
   }
 
   return (
-    <section className="flex flex-col gap-6">
+    <section className="w-full flex flex-col gap-6">
       <h2 className="font-service-card text-2xl font-bold text-center">
         Membership
       </h2>

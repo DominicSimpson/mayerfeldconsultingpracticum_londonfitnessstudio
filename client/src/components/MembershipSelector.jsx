@@ -22,7 +22,7 @@ export default function MembershipSelector() {
   );
 
   return (
-    <section className="w-full max-w-250 mx-auto flex flex-col gap-4">
+    <section className="w-full flex flex-col gap-4">
       <FilterMenu
         id="tier-menu"
         label="Membership:"

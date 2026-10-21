@@ -15,7 +15,7 @@ export default function Cart({ onCheckOut }) {
 
   return (
     <div
-      className="w-full border-black/35 rounded-lg flex flex-col relative gap-3 p-6 border-2 bg-card 
+      className="w-full border-black/35 rounded-lg p-6 flex flex-col relative gap-6 border-2 bg-card 
           transition-[border-color,box-shadow,opacity,filter] duration-200"
     >
       <h2 className="font-service-card text-2xl font-bold text-center">

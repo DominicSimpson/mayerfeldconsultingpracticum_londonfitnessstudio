@@ -7,10 +7,13 @@ const fields = [
     name: "firstLineAddress",
     label: "First Line of Address",
     autoComplete: "address-line1",
+    fullWidth: true,
   },
   {
     name: "secondLineAddress",
-    label: "Second Line of Address (optional)",
+    label: "Address Line 2 (optional)",
+    fullWidth: true,
+    optional: true,
     autoComplete: "address-line2",
   },
   { name: "city", label: "City", autoComplete: "address-line3-city" },
@@ -37,14 +40,18 @@ export default function AddressForm() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        {fields.map(({ name, label, autoComplete }) => (
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+      >
+        {fields.map(({ name, label, autoComplete, fullWidth, optional }) => (
           <div
             key={name}
-            className="grid grid-cols-[8rem_1fr] items-center gap-3"
+            className={`flex flex-col justify-end gap-1 ${fullWidth ? "sm:col-span-2" : ""}`}
           >
-            <label htmlFor={name} className="font-p-text">
-              {label}:
+            <label htmlFor={name} className="font-p-text content">
+              {label}
+              {optional && " (optional)"}:
               <input
                 id={name}
                 type="text"
@@ -52,15 +59,13 @@ export default function AddressForm() {
                 value={formData[name]}
                 onChange={handleChange}
                 autoComplete={autoComplete}
-                required
+                required={!optional}
                 className="w-full rounded-lg border-2 border-black/35 bg-white px-3 py-2
                   focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
               />
             </label>
           </div>
         ))}
-
-        <button type="submit">Submit</button>
       </form>
     </div>
   );
