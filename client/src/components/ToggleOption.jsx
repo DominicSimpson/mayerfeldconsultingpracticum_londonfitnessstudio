@@ -70,7 +70,7 @@ export default function ToggleOption({
           aria-label={`${title} quantity`}
           className="mt-2 self-stretch flex items-center justify-between gap-3"
         >
-          <span className="text-sm font-semibold text-nav-text">
+          <span className="font-p-text text-sm font-semibold text-nav-text p-3">
             Add to Cart
           </span>
 

@@ -22,7 +22,7 @@ export default function MembershipSelector() {
   );
 
   return (
-    <section className="w-full flex flex-col gap-4">
+    <section className="w-full flex flex-col gap-4 font-p-text">
       <FilterMenu
         id="tier-menu"
         label="Membership:"
@@ -35,6 +35,7 @@ export default function MembershipSelector() {
       />
 
       <input
+        className="font-p-text"
         type="search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}

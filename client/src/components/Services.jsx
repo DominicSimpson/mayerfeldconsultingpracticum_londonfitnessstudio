@@ -56,7 +56,7 @@ function Services() {
             <Paragraph>{service.text}</Paragraph>
             <a
               href="#"
-              className="mt-auto self-start font-bold text-nav-text hover:underline focus-visible:underline"
+              className="font-p-text mt-auto self-start font-bold text-nav-text hover:underline focus-visible:underline"
             >
               Learn more
             </a>

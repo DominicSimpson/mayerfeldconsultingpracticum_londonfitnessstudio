@@ -27,6 +27,7 @@ export default function Cart({ onCheckOut }) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <div className="flex flex-col gap-3">
+            <Paragraph className="font-extrabold">Order Items</Paragraph>
             <ul>
               {cartItems.map((item) => (
                 <li key={item.id}>
@@ -48,7 +49,7 @@ export default function Cart({ onCheckOut }) {
               className="block mt-6 py-3 px-10 mx-auto font-semibold text-base text-white 
               bg-sign-up-button rounded-lg cursor-pointer enabled:hover:brightness-110
               focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
-              disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+              disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed font-p-text"
               onClick={handleCheckout}
               disabled={cartItems.length === 0}
             >
