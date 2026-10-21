@@ -1,8 +1,16 @@
 import Paragraph from "./Paragraph";
 import { useCart } from "./CartContext";
 
-export default function Cart() {
+export default function Cart({ onCheckOut }) {
   const { cartItems, totalItems, totalPrice } = useCart();
+
+  function handleCheckout() {
+    if (onCheckOut) {
+      onCheckOut(cartItems);
+    } else {
+      console.log("Checking out:", cartItems);
+    }
+  }
 
   return (
     <div
@@ -27,6 +35,18 @@ export default function Cart() {
           </ul>
           <Paragraph>Total items: {totalItems}</Paragraph>
           <Paragraph>Total: £{totalPrice.toFixed(2)}</Paragraph>
+
+          <button
+            type="button"
+            className="block mt-6 py-3 px-10 mx-auto font-semibold text-base text-white 
+              bg-sign-up-button rounded-lg cursor-pointer enabled:hover:brightness-110
+              focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
+              disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+            onClick={handleCheckout}
+            disabled={cartItems.length === 0}
+          >
+            Checkout
+          </button>
         </>
       )}
     </div>

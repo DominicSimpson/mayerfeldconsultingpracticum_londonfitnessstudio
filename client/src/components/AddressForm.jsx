@@ -19,14 +19,6 @@ const fields = [
   { country: "country", label: "Country", autoComplete: "country-name" },
 ];
 
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  setFormData({
-    ...formData,
-    [name]: value,
-  });
-};
-
 const initialFormData = Object.fromEntries(fields.map((f) => [f.name, ""]));
 
 export default function AddressForm() {
@@ -47,19 +39,20 @@ export default function AddressForm() {
     <div>
       <h2>Address Form</h2>
       <form onSubmit={handleSubmit}>
-        {fields.map(({name, label, autoComplete}) => (
-        <div key={name}>
-          <label>
-            {label}:
-            <input
-              type="text"
-              name="firstName"
-              value={formData.[name]}
-              onChange={handleChange}
-              required
-            />
-          </label>
-        </div>
+        {fields.map(({ name, label, autoComplete }) => (
+          <div key={name}>
+            <label>
+              {label}:
+              <input
+                type="text"
+                name="firstName"
+                value={formData[name]}
+                onChange={handleChange}
+                autoComplete={autoComplete}
+                required
+              />
+            </label>
+          </div>
         ))}
 
         <button type="submit">Submit</button>

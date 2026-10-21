@@ -3,6 +3,7 @@ import ToggleOption from "./ToggleOption.jsx";
 import FilterMenu from "./FilterMenu.jsx";
 import membershipTiers from "../../../server/data/membershipTiers";
 import Paragraph from "./Paragraph.jsx";
+import { useCart } from "./CartContext.jsx";
 
 // adding a tier updates the menu automatically
 const menuOptions = [
@@ -77,44 +78,6 @@ export default function MembershipSelector({ onSignUp }) {
           />
         ))}
       </div>
-
-      <div
-        className="w-full border-black/35 rounded-lg flex flex-col relative gap-3 p-6 border-2 bg-card 
-          transition-[border-color,box-shadow,opacity,filter] duration-200"
-      >
-        <h2 className="font-service-card text-2xl font-bold text-center">
-          Your Cart
-        </h2>
-        {cartItems.length === 0 ? (
-          <Paragraph>Cart is empty</Paragraph>
-        ) : (
-          <>
-            <ul>
-              {cartItems.map((item) => (
-                <li key={item.id}>
-                  <Paragraph>
-                    {item.title}: £{item.price} x {item.quantity}
-                  </Paragraph>
-                </li>
-              ))}
-            </ul>
-            <Paragraph>Total items: {totalItems}</Paragraph>
-            <Paragraph>Total: £{totalPrice.toFixed(2)}</Paragraph>
-          </>
-        )}
-      </div>
-
-      <button
-        type="button"
-        className="block mt-6 py-3 px-10 mx-auto font-semibold text-base text-white 
-        bg-sign-up-button rounded-lg cursor-pointer enabled:hover:brightness-110
-        focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
-        disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
-        onClick={handleSignUp}
-        disabled={!selectedTier || !selectedIsVisible}
-      >
-        Sign Up
-      </button>
     </section>
   );
 }
