@@ -15,7 +15,18 @@ export default function MembershipSelector() {
   // are controlled by it. "" means nothing selected.
   const [selectedTierId, setSelectedTierId] = useState("");
   const [query, setQuery] = useState("");
+  const [confirmation, setConfirmation] = useState("");
   const { items, changeQuantity } = useCart();
+
+  function handleQuantityChange(tier, delta) {
+    changeQuantity(tier, delta);
+    // Only announce additions; clear the message when the quantity goes down
+    setConfirmation(
+      delta > 0
+        ? `${tier.title} added to your cart.`
+        : `${tier.title} removed from your cart.`,
+    );
+  }
 
   const visibleTiers = membershipTiers.filter((tier) =>
     tier.title.toLowerCase().includes(query.toLowerCase()),
@@ -61,10 +72,14 @@ export default function MembershipSelector() {
             description={tier.text}
             features={tier.features}
             quantity={items.find((item) => item.id === tier.id)?.quantity ?? 0}
-            onQuantityChange={(delta) => changeQuantity(tier, delta)}
+            onQuantityChange={(delta) => handleQuantityChange(tier, delta)}
           />
         ))}
       </div>
+
+      <p role="status" className="text-center font-bold">
+        {confirmation}
+      </p>
     </section>
   );
 }
