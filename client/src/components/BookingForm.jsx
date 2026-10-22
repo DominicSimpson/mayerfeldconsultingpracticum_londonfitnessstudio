@@ -20,7 +20,7 @@ function BookingForm({ itemTitle }) {
       onSubmit={handleSubmit}
       className="mt-auto flex flex-col items-center gap-3 border-t border-black/15 pt-4"
     >
-      <h4 className="font-service-card font-bold">Book {itemTitle}</h4>
+      <h4 className="font-service-card font-bold">Book Session</h4>
 
       <DatePicker value={selectedDate} onChange={setSelectedDate} />
       <HourPicker value={selectedHour} onChange={setSelectedHour} />

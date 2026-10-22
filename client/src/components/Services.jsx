@@ -1,16 +1,16 @@
 import Paragraph from "./Paragraph.jsx";
-import londonFitnessStudioPhoto from "../assets/images/fitnessclasses_photo.jpg";
-import londonZumbaClassesPhoto from "../assets/images/zumbaclasses_photo.jpg";
-import londonNutritionCounsellingPhoto from "../assets/images/nutritioncounselling_photo.jpg";
-import londonWellnessProgramsPhoto from "../assets/images/wellnessprograms_photo.jpg";
+import londonFitnessStudioPhoto from "../assets/images/services/fitnessclasses_photo.jpg";
+import londonZumbaClassesPhoto from "../assets/images/services/zumbaclasses_photo.jpg";
+import londonNutritionCounsellingPhoto from "../assets/images/services/nutritioncounselling_photo.jpg";
+import londonWellnessProgramsPhoto from "../assets/images/services/wellnessprograms_photo.jpg";
 import BookingForm from "./BookingForm.jsx";
 import { services } from "../../../server/data/services";
 
 const images = {
-  "fitness-classes": londonFitnessStudioPhoto,
-  "zumba-classes": londonZumbaClassesPhoto,
-  "nutrition-counselling": londonNutritionCounsellingPhoto,
-  "wellness-programs": londonWellnessProgramsPhoto,
+  fitness_classes: londonFitnessStudioPhoto,
+  zumba_classes: londonZumbaClassesPhoto,
+  nutrition_counselling: londonNutritionCounsellingPhoto,
+  wellness_programs: londonWellnessProgramsPhoto,
 };
 
 function Services() {
@@ -32,7 +32,7 @@ function Services() {
           >
             {images[service.id] && (
               <img
-                src={images[service.img]}
+                src={images[service.id]}
                 alt={service.title}
                 className="w-full h-48 object-cover rounded-md"
               />
@@ -43,7 +43,7 @@ function Services() {
             <Paragraph>{service.text}</Paragraph>
             <a
               href="#"
-              className="font-p-text mt-auto self-start font-bold text-nav-text hover:underline focus-visible:underline"
+              className="font-p-text self-start font-bold text-nav-text hover:underline focus-visible:underline"
             >
               Learn more
             </a>
