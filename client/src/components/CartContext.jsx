@@ -12,31 +12,26 @@ export function CartProvider({ children }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   function addItem(item) {
-    // lineId lets the same service be booked for several different slots
-    setItems((prev) => {
-      const existing = prev.find((i) => sameLine(i, item));
-      if (existing) {
-        return prev.map((i) =>
-          sameLine(i, item)
-            ? { ...i, quantity: Math.min(i.quantity + 1, MAX_QUANTITY) }
-            : i,
-        );
-      }
-      return [...prev, { ...item, quantity: 1 }];
-    });
+    changeQuantity(item, 1);
   }
 
   function changeQuantity(item, delta) {
-    setItems((prev) =>
-      
-      prev
+    setItems((prev) => {
+      const existing = prev.find((i) => sameLine(i, item));
+
+      // Not in the cart yet: add it on the first "+"
+      if (!existing) {
+        return delta > 0 ? [...prev, { ...item, quantity: 1 }] : prev;
+      }
+
+      return prev
         .map((i) =>
           sameLine(i, item)
             ? { ...i, quantity: Math.min(i.quantity + delta, MAX_QUANTITY) }
             : i,
         )
-        .filter((i) => i.quantity > 0),
-    );
+        .filter((i) => i.quantity > 0);
+    });
   }
 
   function removeItem(item) {
