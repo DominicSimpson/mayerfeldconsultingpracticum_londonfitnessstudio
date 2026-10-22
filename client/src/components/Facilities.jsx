@@ -5,6 +5,7 @@ import saunaPhoto from "../assets/images/sauna_photo.jpg";
 import sportsCourtsPhoto from "../assets/images/sportscourts_photo.jpg";
 import DatePicker, { today } from "./DatePicker.jsx";
 import { useState } from "react";
+import HourPicker from "./HourPicker.jsx";
 
 const facilities = [
   {
@@ -31,6 +32,7 @@ const facilities = [
 
 function Facilities() {
   const [selectedDate, setSelectedDate] = useState(today);
+  const [selectedHour, setSelectedHour] = useState("09:00");
 
   return (
     <section className="w-full border border-black/35 rounded-lg p-6 flex flex-col gap-6">
@@ -69,6 +71,7 @@ function Facilities() {
         ))}
       </div>
       <DatePicker value={selectedDate} onChange={setSelectedDate} />
+      <HourPicker value={selectedHour} onChange={setSelectedHour} />
     </section>
   );
 }

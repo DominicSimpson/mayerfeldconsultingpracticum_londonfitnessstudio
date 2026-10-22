@@ -1,8 +1,7 @@
-import { useId } from "react";
+import { useRef } from "react";
 
-// So people can't pick a past date
-
-const today = new Date().toLocaleDateString("en-GB");
+// So people can't pick a past date (must be YYYY-MM-DD for the input):
+const today = new Date().toLocaleDateString("en-CA");
 
 function DatePicker({
   label = "Choose a date",
@@ -11,21 +10,29 @@ function DatePicker({
   min = today,
   max,
 }) {
-  const id = useId();
+  const inputRef = useRef(null);
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <label htmlFor={id} className="font-bold font-p-text">
-        Choose a date
-      </label>
+    <div className="relative inline-block">
+      <button
+        type="button"
+        onClick={() => inputRef.current?.showPicker()}
+        aria-label={label}
+        title={label}
+        className="border border-black/25 rounded-md px-3 py-2 bg-card hover:bg-black/5"
+      >
+        📅
+      </button>
       <input
-        id={id}
+        ref={inputRef}
         type="date"
         value={value}
         min={min}
         max={max}
         onChange={(e) => onChange(e.target.value)}
-        className="border border-black/25 rounded-md px-3 py-2 bg-card"
+        tabIndex={-1}
+        aria-hidden="true"
+        className="absolute left-0 top-full h-0 w-0 opacity-0 pointer-events-none"
       />
     </div>
   );
