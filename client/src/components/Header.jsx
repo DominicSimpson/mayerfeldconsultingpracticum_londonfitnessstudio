@@ -4,13 +4,12 @@ import Hamburger from "hamburger-react";
 import { useCart } from "./CartContext.jsx";
 
 function Header() {
-  const links = ["Home", "About", "Services", "Contact"];
   const [isOpen, setOpen] = useState(false);
   const { totalItems, setIsCartOpen } = useCart();
 
   return (
     <header
-      className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-y-4 p-4 bg-header
+      className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-y-4 p-4 bg-header-footer
       [grid-template-areas:'logo_title_controls'_'nav_nav_nav']
       sm:grid-cols-[1fr_auto_1fr]"
     >
@@ -55,23 +54,6 @@ function Header() {
           />
         </div>
       </div>
-
-      <nav
-        className={`[grid-area:nav] font-serif flex-col items-center gap-4 p-4
-        ${isOpen ? "flex" : "hidden"}
-        sm:flex sm:flex-row sm:justify-center sm:flex-wrap`}
-      >
-        {links.map((label) => (
-          <a
-            key={label}
-            href="#"
-            onClick={() => setOpen(false)}
-            className="text-lg mx-2 font-bold text-nav-text hover:underline sm:text-[1.65rem] sm:mx-6"
-          >
-            {label}
-          </a>
-        ))}
-      </nav>
     </header>
   );
 }

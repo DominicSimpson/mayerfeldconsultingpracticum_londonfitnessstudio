@@ -6,7 +6,7 @@
   --font-service-card: "Roboto", sans-serif;
   --font-p-text: "Google Sans Flex", sans-serif;
 
-  --color-header: #19b0ec;
+  --color-header-footer: #000000;
   --color-footer: #876464;
   --color-main: #efe3e3;
   --color-card: #ffffff;
@@ -14,4 +14,3 @@
   --color-nav-text: #0b2540;
   --color-sign-up-button: #0e7490;
 }
-

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useCart } from "./CartContext.jsx";
+import Paragraph from "./Paragraph.jsx";
 
 const gbp = new Intl.NumberFormat("en-GB", {
   style: "currency",
@@ -52,18 +53,18 @@ function Cart() {
           ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-service-card text-2xl font-bold">Your cart</h2>
+          <h2 className="font-p-text text-2xl font-bold">Your cart</h2>
           <button
             type="button"
             onClick={() => setIsCartOpen(false)}
-            className="font-bold border border-black/25 rounded-md px-3 py-1 hover:bg-black/5"
+            className="font-p-text font-bold border border-black/25 rounded-md px-3 py-1 hover:bg-black/5"
           >
             Close
           </button>
         </div>
 
         {isEmpty ? (
-          <p>Your cart is empty.</p>
+          <Paragraph>Your cart is empty.</Paragraph>
         ) : (
           <>
             <ul className="flex flex-col gap-4">
@@ -103,7 +104,7 @@ function Cart() {
                       </button>
                     </div>
 
-                    <p className="font-bold">
+                    <p className="font-p-text font-bold">
                       {gbp.format(item.price * item.quantity)}
                     </p>
                   </div>
@@ -111,7 +112,7 @@ function Cart() {
                   <button
                     type="button"
                     onClick={() => removeItem(item)}
-                    className="self-start text-sm underline"
+                    className="font-p-text self-start text-sm underline"
                   >
                     Remove
                   </button>
@@ -119,7 +120,9 @@ function Cart() {
               ))}
             </ul>
 
-            <p className="text-lg font-bold">Total: {gbp.format(totalPrice)}</p>
+            <p className="font-p-text text-lg font-bold">
+              Total: {gbp.format(totalPrice)}
+            </p>
           </>
         )}
       </aside>
