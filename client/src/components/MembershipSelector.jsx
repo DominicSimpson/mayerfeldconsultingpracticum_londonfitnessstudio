@@ -15,7 +15,7 @@ export default function MembershipSelector() {
   // are controlled by it. "" means nothing selected.
   const [selectedTierId, setSelectedTierId] = useState("");
   const [query, setQuery] = useState("");
-  const { cartItems, changeQuantity } = useCart();
+  const { items, changeQuantity } = useCart();
 
   const visibleTiers = membershipTiers.filter((tier) =>
     tier.title.toLowerCase().includes(query.toLowerCase()),
@@ -60,9 +60,7 @@ export default function MembershipSelector() {
             price={`£${tier.price}`}
             description={tier.text}
             features={tier.features}
-            quantity={
-              cartItems.find((item) => item.id === tier.id)?.quantity ?? 0
-            }
+            quantity={items.find((item) => item.id === tier.id)?.quantity ?? 0}
             onQuantityChange={(delta) => changeQuantity(tier, delta)}
           />
         ))}

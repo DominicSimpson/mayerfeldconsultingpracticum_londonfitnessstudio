@@ -1,63 +1,130 @@
-import Paragraph from "./Paragraph";
-import AddressForm from "./AddressForm";
-import { useCart } from "./CartContext";
+import { useEffect } from "react";
+import { useCart } from "./CartContext.jsx";
 
-export default function Cart({ onCheckOut }) {
-  const { cartItems, totalItems, totalPrice } = useCart();
+const gbp = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+});
 
-  function handleCheckout() {
-    if (onCheckOut) {
-      onCheckOut(cartItems);
-    } else {
-      console.log("Checking out:", cartItems);
+function Cart() {
+  const {
+    items,
+    removeItem,
+    changeQuantity,
+    totalPrice,
+    isCartOpen,
+    setIsCartOpen,
+  } = useCart();
+
+  const isEmpty = items.length === 0;
+
+  // Close the drawer with the Escape key
+  useEffect(() => {
+    if (!isCartOpen) return;
+
+    function handleKeyDown(e) {
+      if (e.key === "Escape") setIsCartOpen(false);
     }
-  }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isCartOpen, setIsCartOpen]);
 
   return (
-    <div
-      className="w-full border-black/35 rounded-lg p-6 flex flex-col relative gap-6 border-2 bg-card 
-          transition-[border-color,box-shadow,opacity,filter] duration-200"
-    >
-      <h2 className="font-service-card text-2xl font-bold text-center">
-        Your Cart
-      </h2>
+    <>
+      {/* Backdrop: click outside the drawer to close it */}
+      {isCartOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40"
+          onClick={() => setIsCartOpen(false)}
+          aria-hidden="true"
+        />
+      )}
 
-      {cartItems.length === 0 ? (
-        <Paragraph>Cart is empty</Paragraph>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          <div className="flex flex-col gap-3">
-            <Paragraph className="font-extrabold">Order Items</Paragraph>
-            <ul>
-              {cartItems.map((item) => (
-                <li key={item.id}>
-                  <Paragraph>
-                    {item.title}: £{item.price} x {item.quantity}
-                  </Paragraph>
+      <aside
+        id="cart"
+        aria-label="Your cart"
+        aria-hidden={!isCartOpen}
+        inert={!isCartOpen}
+        className={`fixed top-0 right-0 z-50 h-full w-full max-w-sm overflow-y-auto
+          bg-card p-6 shadow-xl transition-transform duration-200
+          flex flex-col gap-4
+          ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
+      >
+        <div className="flex items-center justify-between">
+          <h2 className="font-service-card text-2xl font-bold">Your cart</h2>
+          <button
+            type="button"
+            onClick={() => setIsCartOpen(false)}
+            className="font-bold border border-black/25 rounded-md px-3 py-1 hover:bg-black/5"
+          >
+            Close
+          </button>
+        </div>
+
+        {isEmpty ? (
+          <p>Your cart is empty.</p>
+        ) : (
+          <>
+            <ul className="flex flex-col gap-4">
+              {items.map((item) => (
+                <li
+                  key={`${item.id}-${item.date}-${item.hour}`}
+                  className="flex flex-col gap-2 border-b border-black/15 pb-4"
+                >
+                  <div>
+                    <p className="font-bold">{item.title}</p>
+                    {item.date && (
+                      <p className="text-sm">
+                        {item.date} at {item.hour}
+                      </p>
+                    )}
+                    <p className="text-sm">{gbp.format(item.price)} each</p>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => changeQuantity(item, -1)}
+                        aria-label={`Decrease quantity of ${item.title}`}
+                        className="border border-black/25 rounded-md px-3 py-1 hover:bg-black/5"
+                      >
+                        -
+                      </button>
+                      <span aria-live="polite">{item.quantity}</span>
+                      <button
+                        type="button"
+                        onClick={() => changeQuantity(item, 1)}
+                        aria-label={`Increase quantity of ${item.title}`}
+                        className="border border-black/25 rounded-md px-3 py-1 hover:bg-black/5"
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <p className="font-bold">
+                      {gbp.format(item.price * item.quantity)}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => removeItem(item)}
+                    className="self-start text-sm underline"
+                  >
+                    Remove
+                  </button>
                 </li>
               ))}
             </ul>
-            <Paragraph>Total items: {totalItems}</Paragraph>
-            <Paragraph>Total: £{totalPrice.toFixed(2)}</Paragraph>
-          </div>
 
-          <div className="flex flex-col gap-6">
-            <AddressForm />
-
-            <button
-              type="button"
-              className="block mt-6 py-3 px-10 mx-auto font-semibold text-base text-white 
-              bg-sign-up-button rounded-lg cursor-pointer enabled:hover:brightness-110
-              focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
-              disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed font-p-text"
-              onClick={handleCheckout}
-              disabled={cartItems.length === 0}
-            >
-              Checkout
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+            <p className="text-lg font-bold">Total: {gbp.format(totalPrice)}</p>
+          </>
+        )}
+      </aside>
+    </>
   );
 }
+
+export default Cart;

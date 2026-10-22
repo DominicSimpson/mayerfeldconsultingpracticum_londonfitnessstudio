@@ -3,36 +3,61 @@ import { createContext, useContext, useState } from "react";
 const CartContext = createContext(null);
 const MAX_QUANTITY = 10;
 
+// Same service, same date and same hour = same line
+const sameLine = (a, b) =>
+  a.id === b.id && a.date === b.date && a.hour === b.hour;
+
 export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
+  const [items, setItems] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-  function changeQuantity(item, delta) {
-    setCartItems((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
-
-      if (!existing) {
-        return delta > 0 ? [...prev, { ...item, quantity: 1 }] : prev;
+  function addItem(item) {
+    // lineId lets the same service be booked for several different slots
+    setItems((prev) => {
+      const existing = prev.find((i) => sameLine(i, item));
+      if (existing) {
+        return prev.map((i) =>
+          sameLine(i, item)
+            ? { ...i, quantity: Math.min(i.quantity + 1, MAX_QUANTITY) }
+            : i,
+        );
       }
-
-      const newQuantity = Math.min(existing.quantity + delta, MAX_QUANTITY);
-      if (newQuantity <= 0) {
-        return prev.filter((i) => i.id !== item.id);
-      }
-      return prev.map((i) =>
-        i.id === item.id ? { ...i, quantity: newQuantity } : i,
-      );
+      return [...prev, { ...item, quantity: 1 }];
     });
   }
 
-  const totalItems = cartItems.reduce((sum, i) => sum + i.quantity, 0);
-  const totalPrice = cartItems.reduce(
-    (sum, i) => sum + i.price * i.quantity,
-    0,
-  );
+  function changeQuantity(item, delta) {
+    setItems((prev) =>
+      
+      prev
+        .map((i) =>
+          sameLine(i, item)
+            ? { ...i, quantity: Math.min(i.quantity + delta, MAX_QUANTITY) }
+            : i,
+        )
+        .filter((i) => i.quantity > 0),
+    );
+  }
+
+  function removeItem(item) {
+    setItems((prev) => prev.filter((i) => !sameLine(i, item)));
+  }
+
+  const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
+  const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
     <CartContext.Provider
-      value={{ cartItems, changeQuantity, totalItems, totalPrice }}
+      value={{
+        items,
+        addItem,
+        removeItem,
+        changeQuantity,
+        totalItems,
+        totalPrice,
+        isCartOpen,
+        setIsCartOpen,
+      }}
     >
       {children}
     </CartContext.Provider>

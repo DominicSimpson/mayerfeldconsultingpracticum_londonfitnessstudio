@@ -1,17 +1,18 @@
 import { useState } from "react";
 import logo from "../assets/logo/lfs_logo.png";
 import Hamburger from "hamburger-react";
+import { useCart } from "./CartContext.jsx";
 
 function Header() {
   const links = ["Home", "About", "Services", "Contact"];
   const [isOpen, setOpen] = useState(false);
+  const { totalItems, setIsCartOpen } = useCart();
 
   return (
     <header
-      className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-y-4 p-4 bg-header
-      [grid-template-areas:'logo_title'_'nav_nav']
-      sm:grid-cols-[1fr_auto_1fr]
-      sm:[grid-template-areas:'logo_title_._'_'nav_nav_nav']"
+      className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-y-4 p-4 bg-header
+      [grid-template-areas:'logo_title_controls'_'nav_nav_nav']
+      sm:grid-cols-[1fr_auto_1fr]"
     >
       <a
         href={import.meta.env.BASE_URL}
@@ -23,6 +24,7 @@ function Header() {
           alt="London Fitness Studio Logo"
         />
       </a>
+
       <h1
         className="[grid-area:title] font-display text-left 
         text-[length:clamp(1.5rem,7vw,2rem)] 
@@ -31,13 +33,27 @@ function Header() {
         London Fitness Studio
       </h1>
 
-      <div className="[grad-area:menu] justify-self-end sm:hidden">
-        <Hamburger
-          toggled={isOpen}
-          toggle={setOpen}
-          label="Show menu"
-          size={24}
-        />
+      <div className="[grid-area:controls] justify-self-end flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setIsCartOpen(true)}
+          aria-label={`Open cart, ${totalItems} items`}
+          className="text-2xl"
+        >
+          🛒
+          {totalItems > 0 && (
+            <span className="text-base font-bold">{totalItems}</span>
+          )}
+        </button>
+
+        <div className="sm:hidden">
+          <Hamburger
+            toggled={isOpen}
+            toggle={setOpen}
+            label="Show menu"
+            size={24}
+          />
+        </div>
       </div>
 
       <nav
@@ -59,4 +75,5 @@ function Header() {
     </header>
   );
 }
+
 export default Header;

@@ -49,7 +49,11 @@ function Facilities() {
             >
               Learn more
             </a>
-            <BookingForm itemTitle={facility.title} />
+            <BookingForm
+              itemId={facility.id}
+              itemTitle={facility.title}
+              price={facility.price}
+            />
           </article>
         ))}
       </div>

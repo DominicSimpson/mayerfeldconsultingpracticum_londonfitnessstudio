@@ -1,18 +1,25 @@
 import { useState, useId } from "react";
 import DatePicker, { today } from "./DatePicker.jsx";
 import HourPicker from "./HourPicker.jsx";
+import { useCart } from "./CartContext.jsx";
 
-function BookingForm({ itemTitle }) {
+function BookingForm({ itemId, itemTitle, price }) {
+  const { addItem } = useCart();
   const [selectedDate, setSelectedDate] = useState(today);
   const [selectedHour, setSelectedHour] = useState("09:00");
   const [confirmation, setConfirmation] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
+    addItem({
+      id: itemId,
+      title: itemTitle,
+      price,
+      date: selectedDate,
+      hour: selectedHour,
+    });
     // Replace with a real API call once you have a backend
-    setConfirmation(
-      `Booked ${itemTitle} on ${selectedDate} at ${selectedHour}.`,
-    );
+    setConfirmation(`${itemTitle} added to your cart.`);
   }
 
   return (
@@ -29,7 +36,7 @@ function BookingForm({ itemTitle }) {
         type="submit"
         className="font-bold border border-black/25 rounded-md px-6 py-2 bg-card hover:bg-black/5"
       >
-        Book now
+        Add to Cart
       </button>
       {confirmation && <p role="status">{confirmation}</p>}
     </form>

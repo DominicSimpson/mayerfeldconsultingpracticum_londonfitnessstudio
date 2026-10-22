@@ -47,7 +47,11 @@ function Services() {
             >
               Learn more
             </a>
-            <BookingForm itemTitle={service.title} />
+            <BookingForm
+              itemId={service.id}
+              itemTitle={service.title}
+              price={service.price}
+            />
           </article>
         ))}
       </div>

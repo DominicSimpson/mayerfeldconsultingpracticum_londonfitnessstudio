@@ -6,6 +6,7 @@ import studioPhoto from "./assets/images/london_fitness_studio_photo.jpg";
 import Paragraph from "./components/Paragraph";
 import Facilities from "./components/Facilities";
 import OpeningTimes from "./components/OpeningTimes";
+import Cart from "./components/Cart";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Membership />
         <OpeningTimes />
       </main>
+      <Cart />
 
       <Footer />
     </>
