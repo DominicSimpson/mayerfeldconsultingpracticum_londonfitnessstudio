@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useCart } from "./CartContext.jsx";
 import Paragraph from "./Paragraph.jsx";
+import AddressForm from "./AddressForm.jsx";
 
 const gbp = new Intl.NumberFormat("en-GB", {
   style: "currency",
@@ -123,6 +124,7 @@ function Cart() {
             <p className="font-p-text text-lg font-bold">
               Total: {gbp.format(totalPrice)}
             </p>
+            <AddressForm />
           </>
         )}
       </aside>

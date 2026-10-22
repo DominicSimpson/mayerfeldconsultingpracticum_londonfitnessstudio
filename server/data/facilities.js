@@ -10,19 +10,19 @@ export const facilities = [
     title: "Swimming Pools",
     price: 10,
 
-    text: "Swim laps in our main pool or let the little ones splash safely in our dedicated children's pool.",
+    text: "Swim laps in our main pool or let the little ones splash safely in our dedicated children's pool. We also have swimming lessons every week.",
   },
   {
     id: "sauna_steamrooms",
     title: "Sauna and Steam Rooms",
     price: 12,
-    text: "Unwind after your workout in our sauna, spa, and steam rooms, the perfect way to ease tired muscles.",
+    text: "Unwind after your workout in our sauna, spa, jacuzzi, and steam rooms, the perfect way to ease tired muscles.",
   },
   {
     id: "sports_courts",
     title: "Sports Courts",
     price: 15,
 
-    text: "Book a court for badminton, tennis, or indoor football, whether you're playing with friends or joining a game.",
+    text: "Book a court for badminton, tennis, squash, or indoor football, whether you're playing with friends or joining a game.",
   },
 ];

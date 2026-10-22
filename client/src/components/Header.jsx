@@ -1,10 +1,7 @@
-import { useState } from "react";
 import logo from "../assets/logo/lfs_logo.png";
-import Hamburger from "hamburger-react";
 import { useCart } from "./CartContext.jsx";
 
 function Header() {
-  const [isOpen, setOpen] = useState(false);
   const { totalItems, setIsCartOpen } = useCart();
 
   return (
@@ -25,11 +22,11 @@ function Header() {
       </a>
 
       <h1
-        className="[grid-area:title] font-display text-left 
+        className="[grid-area:title] font-heading text-left 
         text-[length:clamp(1.5rem,7vw,2rem)] 
-        sm:text-center sm:text-[length:clamp(2rem,6vw,5rem)]"
+        sm:text-center sm:text-[length:clamp(2rem,6vw,5rem)] text-white"
       >
-        London Fitness Studio
+        LONDON FITNESS STUDIO
       </h1>
 
       <div className="[grid-area:controls] justify-self-end flex items-center gap-2">
@@ -37,22 +34,14 @@ function Header() {
           type="button"
           onClick={() => setIsCartOpen(true)}
           aria-label={`Open cart, ${totalItems} items`}
-          className="text-2xl"
+          title={`View cart (${totalItems} ${totalItems === 1 ? "item" : "items"})`}
+          className="text-2xl size-32"
         >
           🛒
           {totalItems > 0 && (
             <span className="text-base font-bold">{totalItems}</span>
           )}
         </button>
-
-        <div className="sm:hidden">
-          <Hamburger
-            toggled={isOpen}
-            toggle={setOpen}
-            label="Show menu"
-            size={24}
-          />
-        </div>
       </div>
     </header>
   );

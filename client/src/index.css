@@ -1,10 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Abril Fatface", cursive;
-  --font-serif: "Playfair Display", serif;
   --font-service-card: "Roboto", sans-serif;
   --font-p-text: "Google Sans Flex", sans-serif;
+  --font-heading: "Barlow Condensed", sans-serif;
 
   --color-header-footer: #000000;
   --color-footer: #876464;
