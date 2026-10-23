@@ -1,4 +1,9 @@
 import express from "express";
+import pg from "pg";
+
+export const pool = new pg.Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
 const app = express();
 const PORT = process.env.PORT || 3001;
