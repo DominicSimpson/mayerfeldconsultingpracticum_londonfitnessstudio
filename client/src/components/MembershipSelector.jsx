@@ -1,22 +1,21 @@
 import { useState } from "react";
 import ToggleOption from "./ToggleOption.jsx";
 import FilterMenu from "./FilterMenu.jsx";
-import membershipTiers from "../../../server/data/membershipTiers";
 import { useCart } from "./CartContext.jsx";
 
 // adding a tier updates the menu automatically
-const menuOptions = [
-  { value: "", label: "Choose a membership..." },
-  ...membershipTiers.map((tier) => ({ value: tier.id, label: tier.title })),
-];
 
-export default function MembershipSelector() {
+export default function MembershipSelector({ tiers }) {
   // The parent owns the selection; the dropdown and each ToggleOption
   // are controlled by it. "" means nothing selected.
   const [selectedTierId, setSelectedTierId] = useState("");
   const [query, setQuery] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const { items, changeQuantity } = useCart();
+  const menuOptions = [
+    { value: "", label: "Choose a membership..." },
+    ...tiers.map((tier) => ({ value: tier.id, label: tier.title })),
+  ];
 
   function handleQuantityChange(tier, delta) {
     changeQuantity(tier, delta);
@@ -28,7 +27,7 @@ export default function MembershipSelector() {
     );
   }
 
-  const visibleTiers = membershipTiers.filter((tier) =>
+  const visibleTiers = tiers.filter((tier) =>
     tier.title.toLowerCase().includes(query.toLowerCase()),
   );
 

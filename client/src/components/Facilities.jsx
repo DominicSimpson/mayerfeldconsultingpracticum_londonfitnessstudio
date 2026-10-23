@@ -4,7 +4,7 @@ import swimmingPoolPhoto from "../assets/images/facilities/swimmingpool_photo.jp
 import saunaPhoto from "../assets/images/facilities/sauna_photo.jpg";
 import sportsCourtsPhoto from "../assets/images/facilities/sportscourts_photo.jpg";
 import BookingForm from "./BookingForm.jsx";
-import { facilities } from "../../../server/data/facilities";
+import { useProducts } from "../useProducts.js";
 
 const images = {
   gyms: gymPhoto,
@@ -14,7 +14,10 @@ const images = {
 };
 
 function Facilities() {
-  console.log(facilities.map((f) => [f.id, images[f.id]]));
+  const { products: facilities, loading, error } = useProducts("facility");
+
+  if (loading) return <p>Loading facilities...</p>;
+  if (error) return <p>Sorry, we couldn't load the facilities</p>;
 
   return (
     <section className="w-full border border-black/35 rounded-lg p-6 flex flex-col gap-6">
