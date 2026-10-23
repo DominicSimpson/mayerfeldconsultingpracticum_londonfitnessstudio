@@ -16,7 +16,7 @@ export function Membership() {
       <Paragraph className="text-center">
         Choose the plan that fits how you train, then sign up in one click
       </Paragraph>
-      <MembershipSelector tiers={tiers} />;
+      <MembershipSelector tiers={tiers} />
     </section>
   );
 }
