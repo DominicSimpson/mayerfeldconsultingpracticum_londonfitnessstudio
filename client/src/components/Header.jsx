@@ -23,8 +23,8 @@ function Header() {
 
       <h1
         className="[grid-area:title] font-heading text-left 
-        text-[length:clamp(1.5rem,7vw,2rem)] 
-        sm:text-center sm:text-[length:clamp(2rem,6vw,5rem)] text-white"
+        text-[clamp(1.5rem,7vw,2rem)] 
+        sm:text-center sm:text-[clamp(2rem,6vw,5rem)] text-white"
       >
         LONDON FITNESS STUDIO
       </h1>
