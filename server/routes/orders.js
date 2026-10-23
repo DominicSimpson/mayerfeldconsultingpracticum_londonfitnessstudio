@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { pool } from ".db/pool.js";
+import { pool } from "../db/pool.js";
 
 const router = Router();
 
@@ -112,7 +112,7 @@ router.post("/", async (req, res, next) => {
     );
     const orderId = rows[0].id;
 
-    for (l of lines) {
+    for (const l of lines) {
       await client.query(
         `INSERT INTO order_items
             (order_id, product_id, quantity, unit_price, date, hour)

@@ -1,10 +1,46 @@
 import { useState } from "react";
 import { useCart } from "./CartContext.jsx";
 
+const fields = [
+  { name: "firstName", label: "First Name", autoComplete: "given-name" },
+  { name: "surname", label: "Surname", autoComplete: "family-name" },
+  {
+    name: "firstLineAddress",
+    label: "First Line of Address",
+    autoComplete: "address-line1",
+    fullWidth: true,
+  },
+  {
+    name: "secondLineAddress",
+    label: "Address Line 2",
+    fullWidth: true,
+    optional: true,
+    autoComplete: "address-line2",
+  },
+  { name: "city", label: "City", autoComplete: "address-level2" },
+  { name: "county", label: "County", autoComplete: "address-level1" },
+  { name: "postcode", label: "Postcode", autoComplete: "postal-code" },
+  { name: "country", label: "Country", autoComplete: "country-name" },
+  {
+    name: "email",
+    label: "Email",
+    autoComplete: "email",
+    type: "email",
+    fullWidth: true,
+  },
+];
+
+const initialFormData = Object.fromEntries(fields.map((f) => [f.name, ""]));
+
 export default function AddressForm({ onOrderPlaced }) {
   const { items } = useCart();
   const [formData, setFormData] = useState(initialFormData);
   const [status, setStatus] = useState({ state: "idle", message: "" });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
