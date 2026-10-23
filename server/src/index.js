@@ -1,5 +1,6 @@
 import express from "express";
 import productsRouter from "../routes/products.js";
+import ordersRouter from "../routes/orders.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,6 +12,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/products", productsRouter);
+app.use("/api/orders", ordersRouter);
 
 // Catches errors passed to next(err), e.g. database failures
 app.use((err, req, res, next) => {

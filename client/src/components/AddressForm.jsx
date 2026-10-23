@@ -1,48 +1,37 @@
 import { useState } from "react";
+import { useCart } from "./CartContext.jsx";
 
-const fields = [
-  { name: "firstName", label: "First Name", autoComplete: "given-name" },
-  { name: "surname", label: "Surname", autoComplete: "family-name" },
-  {
-    name: "firstLineAddress",
-    label: "First Line of Address",
-    autoComplete: "address-line1",
-    fullWidth: true,
-  },
-  {
-    name: "secondLineAddress",
-    label: "Address Line 2",
-    fullWidth: true,
-    optional: true,
-    autoComplete: "address-line2",
-  },
-  { name: "city", label: "City", autoComplete: "address-line3-city" },
-  { name: "county", label: "County", autoComplete: "address-line4-county" },
-  { name: "postcode", label: "Postcode", autocomplete: "postal-code" },
-  { name: "country", label: "Country", autoComplete: "country-name" },
-  {
-    name: "email",
-    label: "Email",
-    autoComplete: "email",
-    type: "email",
-    fullWidth: true,
-  },
-];
-
-const initialFormData = Object.fromEntries(fields.map((f) => [f.name, ""]));
-
-export default function AddressForm() {
+export default function AddressForm({ onOrderPlaced }) {
+  const { items } = useCart();
   const [formData, setFormData] = useState(initialFormData);
+  const [status, setStatus] = useState({ state: "idle", message: "" });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Send data to an API or process it further
+    setStatus({ state: "submitting", message: "" });
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customer: formData,
+          items: items.map(({ id, quantity, date, hour }) => ({
+            id,
+            quantity,
+            date,
+            hour,
+          })),
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) throw new Error(data.error || "Checkout failed");
+
+      setFormData(initialFormData);
+      onOrderPlaced(data.orderId);
+    } catch (err) {
+      setStatus({ state: "error", message: err.message });
+    }
   };
 
   return (
@@ -70,10 +59,18 @@ export default function AddressForm() {
 
         <button
           type="submit"
-          className="font-p-text font-bold border border-black/25 rounded-md px-6 py-2 hover:bg-black/5 bg-sky-500"
+          disabled={status.state === "submitting"}
+          className="font-p-text font-bold border border-black/25 rounded-md px-6 py-2 hover:bg-black/5 bg-sky-500 disabled:opacity-50"
         >
-          Confirm Checkout
+          {status.state === "submitting"
+            ? "Placing order..."
+            : "Confirm Checkout"}
         </button>
+        {status.state === "error" && (
+          <p role="alert" className="text-red-700">
+            {status.message}
+          </p>
+        )}
       </form>
     </div>
   );

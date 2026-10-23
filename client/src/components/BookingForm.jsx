@@ -18,8 +18,8 @@ function BookingForm({ itemId, itemTitle, price }) {
       date: selectedDate,
       hour: selectedHour,
     });
-    // Replace with a real API call once you have a backend
     setConfirmation(`${itemTitle} added to your cart.`);
+    console.log("date being added:", selectedDate, typeof selectedDate);
   }
 
   return (

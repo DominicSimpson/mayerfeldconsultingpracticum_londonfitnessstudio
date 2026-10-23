@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "./CartContext.jsx";
 import Paragraph from "./Paragraph.jsx";
 import AddressForm from "./AddressForm.jsx";
@@ -16,11 +16,15 @@ function Cart() {
     totalPrice,
     isCartOpen,
     setIsCartOpen,
+    clearCart,
   } = useCart();
+
+  const [orderId, setOrderId] = useState(null);
 
   const isEmpty = items.length === 0;
 
-  // Close the drawer with the Escape key
+  // Close the drawer with the Escape key (unchanged)
+
   useEffect(() => {
     if (!isCartOpen) return;
 
@@ -31,6 +35,11 @@ function Cart() {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isCartOpen, setIsCartOpen]);
+
+  // Reset the confirmation when something new is added
+  useEffect(() => {
+    if (items.length > 0) setOrderId(null);
+  }, [items.length]);
 
   return (
     <>
@@ -64,7 +73,9 @@ function Cart() {
           </button>
         </div>
 
-        {isEmpty ? (
+        {orderId ? (
+          <Paragraph>Thank you! Your order number is {orderId}.</Paragraph>
+        ) : isEmpty ? (
           <Paragraph>Your cart is empty.</Paragraph>
         ) : (
           <>
@@ -124,7 +135,12 @@ function Cart() {
             <p className="font-p-text text-lg font-bold">
               Total: {gbp.format(totalPrice)}
             </p>
-            <AddressForm />
+            <AddressForm
+              onOrderPlaced={(id) => {
+                clearCart();
+                setOrderId(id);
+              }}
+            />
           </>
         )}
       </aside>

@@ -38,6 +38,10 @@ export function CartProvider({ children }) {
     setItems((prev) => prev.filter((i) => !sameLine(i, item)));
   }
 
+  function clearCart() {
+    setItems([]);
+  }
+
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
@@ -48,6 +52,7 @@ export function CartProvider({ children }) {
         addItem,
         removeItem,
         changeQuantity,
+        clearCart,
         totalItems,
         totalPrice,
         isCartOpen,
