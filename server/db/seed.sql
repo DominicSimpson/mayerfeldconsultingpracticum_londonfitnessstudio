@@ -1,6 +1,6 @@
 INSERT INTO products (id, category, title, description, price, features) 
 /* Facilities */
-VALUES ('gyms', 'facilities', 'Gyms', 
+VALUES ('gyms', 'facility', 'Gyms', 
 'Train your way with modern cardio machines, free weights, and strength equipment, 
 with expert staff on hand to help you get started.', 20, NULL
 ),

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT NOT NULL,
     price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
     features TEXT[],
-    created_at TIMESTAMPZ NOT NULL DEFAULT now()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS orders (
     country TEXT NOT NULL,
     email TEXT NOT NULL,
     total_price NUMERIC(10, 2) NOT NULL,
-    created_at TIMESTAMPZ NOT NULL DEFAULT now()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS order_items (
@@ -34,5 +34,5 @@ CREATE TABLE IF NOT EXISTS order_items (
     hour TEXT                               -- facilities/services only
 );
 
-CREATE TABLE IF NOT EXISTS idx_order_items_order ON order_items(order_id);
-CREATE TABLE IF NOT EXITSTS idex_product_categories ON products(category);
+CREATE INDEX IF NOT EXISTS idx_order_items_order ON order_items(order_id);
+CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
