@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
-function AuthModal({ modal, onClose, onSwitchMode }) {
+function AuthModal({ mode, onClose, onSwitchMode }) {
+  console.log("AuthModal rendered with mode:", mode);
+
   const { login, signup } = useAuth();
 
   const [name, setName] = useState("");
@@ -14,12 +16,15 @@ function AuthModal({ modal, onClose, onSwitchMode }) {
 
   useEffect(() => {
     const dialog = dialogRef.current;
+
     if (!dialog) return;
 
     dialog.showModal();
 
     return () => {
-      if (dialog.open) dialog.close();
+      if (dialog.open) {
+        dialog.close();
+      }
     };
   }, []);
 
@@ -58,14 +63,16 @@ function AuthModal({ modal, onClose, onSwitchMode }) {
     // JSX here
     <dialog
       ref={dialogRef}
-      onClose={onClose}
       onCancel={(event) => {
-        if (submitting) event.preventDefault();
+        event.preventDefault();
+
+        if (!submitting) {
+          onClose();
+        }
       }}
-      className="fixed inset-0 m-auto w-[min(90vw,28rem)]
-        max-h-[90vh] overflow-y-auto rounded-xl bg-white p-6
-        text-gray-900 shadow-xl
-        backdrop:bg-black/60"
+      className="fixed inset-0 m-auto w-96 max-w-[90vw]
+        rounded-xl bg-white p-6 text-black shadow-xl
+        border border-gray-400 backdrop:bg-black/60"
       aria-labelledby="auth-modal-title"
     >
       <div className="flex items-center justify-between mb-6">
@@ -85,7 +92,7 @@ function AuthModal({ modal, onClose, onSwitchMode }) {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {mode == "signup" && (
+        {mode === "signup" && (
           <label className="flex flex-col gap-1">
             <span className="font-medium">Full name</span>
             <input
@@ -105,6 +112,7 @@ function AuthModal({ modal, onClose, onSwitchMode }) {
           <input
             type="email"
             autoComplete="email"
+            autoFocus
             required
             maxLength={255}
             value={email}

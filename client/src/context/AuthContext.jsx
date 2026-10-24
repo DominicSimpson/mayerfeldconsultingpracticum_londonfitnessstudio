@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
           credentials: "include",
         });
 
-        if (response.ok) {
+        if (!response.ok) {
           throw new Error("Failed to check session");
         }
 
@@ -41,13 +41,13 @@ export function AuthProvider({ children }) {
     checkSession();
 
     return () => {
-      cancelled: true;
+      cancelled = true;
     };
   }, []);
 
   // Sign up
   async function signup(name, email, password) {
-    const response = await fetch("api/auth/signup", {
+    const response = await fetch("/api/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export function AuthProvider({ children }) {
 
     const data = await response.json();
 
-    if (response.ok) {
+    if (!response.ok) {
       throw new Error(data.error || "Login failed");
     }
 
@@ -101,7 +101,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={(user, loading, signup, login, logout)}>
+    <AuthContext.Provider value={{ user, loading, signup, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
