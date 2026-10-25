@@ -8,6 +8,7 @@ import Facilities from "./components/Facilities";
 import OpeningTimes from "./components/OpeningTimes";
 import Cart from "./components/Cart";
 import ScrollDown from "./components/ScrollDown";
+import ScrollUp from "./components/ScrollUp";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
       <Cart />
 
       <Footer />
+      <ScrollUp />
       <ScrollDown />
     </>
   );

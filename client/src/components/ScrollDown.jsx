@@ -40,7 +40,8 @@ export default function ScrollDown() {
       aria-label="Scroll down"
       className="
                 fixed bottom-8 right-8 z-50
-                -translate-x-1/2
+                w-10 h-10
+                flex items-center justify-center
                  text-black text-4xl
                 opacity-40
                 cursor-pointer
@@ -49,7 +50,7 @@ export default function ScrollDown() {
                 focus-visible:opacity-100 
                 motion-safe:animate-bounce"
     >
-      <span aria-hidden="true">v</span>
+      <span aria-hidden="true">⌄</span>
     </button>
   );
 }
