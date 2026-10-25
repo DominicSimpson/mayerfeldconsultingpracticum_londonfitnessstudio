@@ -8,6 +8,9 @@ import productsRouter from "../routes/products.js";
 import ordersRouter from "../routes/orders.js";
 import authRouter from "../routes/auth.js";
 
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -66,6 +69,19 @@ app.use("/api/products", productsRouter);
 app.use("/api/orders", ordersRouter);
 app.use("/api/auth", authLimiter, authRouter);
 
+// Serve React frontend in production
+if (isProduction) {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const clientDistPath = path.resolve(__dirname, "../../client/dist");
+
+  app.use(express.static(clientDistPath));
+
+  // Support React Router client-side routes
+  app.get("/{*splat}", (req, res) => {
+    res.sendFile(path.join(clientDistPath, "index.html"));
+  });
+}
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err);
@@ -73,6 +89,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });

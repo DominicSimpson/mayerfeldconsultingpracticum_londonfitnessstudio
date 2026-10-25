@@ -1,3 +1,11 @@
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),    
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS products (
     id TEXT PRIMARY KEY,
     category TEXT NOT NULL CHECK (category IN ('facility', 'service', 'membership')),
@@ -10,7 +18,7 @@ CREATE TABLE IF NOT EXISTS products (
 
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
-    user_id TEXT,
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
     first_name TEXT NOT NULL,
     surname TEXT NOT NULL,
     first_line_address TEXT NOT NULL,

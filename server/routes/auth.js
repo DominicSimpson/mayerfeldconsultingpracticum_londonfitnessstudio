@@ -24,8 +24,8 @@ router.post("/signup", async (req, res, next) => {
 
     if (
       !cleanName ||
-      cleanName > 100 ||
-      !cleanEmail > 255 ||
+      cleanName.length > 100 ||
+      cleanEmail.length > 255 ||
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail) ||
       password.length < 12 ||
       Buffer.byteLength(password, "utf8") > 72

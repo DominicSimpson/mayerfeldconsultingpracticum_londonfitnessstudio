@@ -51,13 +51,18 @@ router.post("/", async (req, res, next) => {
       return res.status(400).json({ error: "Invalid quantity" });
     }
 
-    if (item.date != null && !DATE_RE.test(item.date)) {
+    if (
+      item.date != null &&
+      (typeof item.date !== "string" || !DATE_RE.test(item.date))
+    ) {
       return res.status(400).json({ error: "Invalid booking date" });
     }
   }
 
-  const client = await pool.connect();
+  let client;
   try {
+    client = await pool.connect();
+
     // Look up real prices from the database
     const ids = [...new Set(items.map((i) => i.id))];
     const { rows: products } = await client.query(
@@ -94,14 +99,17 @@ router.post("/", async (req, res, next) => {
 
     const { rows } = await client.query(
       `INSERT INTO orders
-        (first_name, surname, first_line_address, second_line_address, city, county, postcode, country, email, total_price)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        (user_id, first_name, surname, first_line_address, 
+        second_line_address, city, county, postcode, 
+        country, email, total_price)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING id`,
       [
+        req.session.userId ?? null,
         customer.firstName.trim(),
         customer.surname.trim(),
         customer.firstLineAddress.trim(),
-        customer.secondLineAddress?.trim(),
+        customer.secondLineAddress?.trim() ?? null,
         customer.city.trim(),
         customer.county.trim(),
         customer.postcode.trim(),
@@ -122,12 +130,19 @@ router.post("/", async (req, res, next) => {
     }
 
     await client.query("COMMIT");
-    res.status(201).json({ orderId, total: totalPence / 100 });
+
+    res.status(201).json({
+      orderId,
+      total: totalPence / 100,
+    });
   } catch (err) {
-    await client.query("ROLLBACK").catch(() => {});
+    if (client) {
+      await client.query("ROLLBACK").catch(() => {});
+    }
+
     next(err);
   } finally {
-    client.release();
+    client?.release();
   }
 });
 
