@@ -61,7 +61,7 @@ function Header() {
         >
           {!loading &&
             (user ? (
-              <div className="flex flex-col gap-2 text-white">
+              <div className="flex flex-col gap-2 text-white font-p-text">
                 <span className="text-sm">Hi, {user.name}</span>
 
                 <button
@@ -71,13 +71,13 @@ function Header() {
                   aria-label="Sign out"
                   className="rounded-md border border-white
                     px-3 py-2 hover:bg-white hover:text-black
-                    disabled:opacity-50"
+                    disabled:opacity-50 font-p-text"
                 >
                   {signingOut ? "Signing out..." : "Sign out"}
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col gap-2 text-white">
+              <div className="flex flex-col gap-2 text-white font-p-text">
                 <button
                   type="button"
                   onClick={() => {
@@ -85,7 +85,7 @@ function Header() {
                     setAuthMode("login");
                   }}
                   className="rounded-md border border-white
-                    px-3 py-2 hover:bg-white hover:text-black"
+                    px-3 py-2 hover:bg-white hover:text-black font-p-text"
                 >
                   Sign in
                 </button>
@@ -94,7 +94,7 @@ function Header() {
                   type="button"
                   onClick={() => setAuthMode("signup")}
                   className="rounded-md bg-white text-black                   
-                  px-3 py-2 hover:bg-gray-200"
+                  px-3 py-2 hover:bg-gray-200 font-p-text"
                 >
                   Sign up
                 </button>
@@ -108,11 +108,13 @@ function Header() {
             title={`View cart (${totalItems} ${
               totalItems === 1 ? "item" : "items"
             })`}
-            className="text-2xl size-16 text-white"
+            className="text-2xl size-16 text-white font-p-text"
           >
             🛒
             {totalItems > 0 && (
-              <span className="text-base font-bold">{totalItems}</span>
+              <span className="text-base font-bold font-p-text">
+                {totalItems}
+              </span>
             )}
           </button>
         </div>
@@ -120,7 +122,7 @@ function Header() {
         {logoutError && (
           <p
             role="alert"
-            className="col-span-full text-red-200 text-sm text-right"
+            className="col-span-full text-red-200 text-sm text-right font-p-text"
           >
             {logoutError}
           </p>

@@ -54,7 +54,7 @@ export default function MembershipSelector({ tiers }) {
       />
 
       <div
-        className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4"
+        className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4 font-p-text"
         role="radiogroup"
         aria-label="Membership options"
       >
@@ -76,7 +76,7 @@ export default function MembershipSelector({ tiers }) {
         ))}
       </div>
 
-      <p role="status" className="text-center font-bold">
+      <p role="status" className="text-center font-bold font-p-text">
         {confirmation}
       </p>
     </section>

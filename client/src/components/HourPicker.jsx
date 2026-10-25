@@ -10,14 +10,14 @@ function HourPicker({ label = "Choose a time", value, onChange }) {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <label htmlFor={id} className="font-bold">
+      <label htmlFor={id} className="font-bold font-p-text">
         {label}
       </label>
       <select
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="border border-black/25 rounded-md px-3 py-2 bg-card"
+        className="border border-black/25 rounded-md px-3 py-2 bg-card font-p-text"
       >
         {hours.map((hour) => (
           <option key={hour} value={hour}>

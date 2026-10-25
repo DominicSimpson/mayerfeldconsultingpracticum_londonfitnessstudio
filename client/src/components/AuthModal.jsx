@@ -60,7 +60,6 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
   }
 
   return (
-    // JSX here
     <dialog
       ref={dialogRef}
       onCancel={(event) => {
@@ -73,10 +72,10 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
       className="fixed inset-0 m-auto w-96 max-w-[90vw]
         rounded-xl bg-white p-6 text-black shadow-xl
         border border-gray-400 backdrop:bg-black/60"
-      aria-labelledby="auth-modal-title"
+      aria-labelledby="auth-modal-title font-p-text"
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 id="auth-modal-title" className="text-2xl font-bold">
+        <h2 id="auth-modal-title" className="text-2xl font-bold font-p-text">
           {mode === "login" ? "Sign in" : "Create an account"}
         </h2>
 
@@ -94,7 +93,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {mode === "signup" && (
           <label className="flex flex-col gap-1">
-            <span className="font-medium">Full name</span>
+            <span className="font-medium font-p-text">Full name</span>
             <input
               type="text"
               autoComplete="name"
@@ -108,7 +107,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
         )}
 
         <label className="flex flex-col gap-1">
-          <span className="font-medium">Email address</span>
+          <span className="font-medium font-p-text">Email address</span>
           <input
             type="email"
             autoComplete="email"
@@ -122,7 +121,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="font-medium">Password</span>
+          <span className="font-medium font-p-text">Password</span>
           <input
             type="password"
             autoComplete={
@@ -135,14 +134,14 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
             className="border rounded-md p-2"
           />
           {mode === "signup" && (
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-gray-600 font-p-text">
               At least 12 characters
             </span>
           )}
         </label>
 
         {error && (
-          <p role="alert" className="text-red-700 text-sm">
+          <p role="alert" className="text-red-700 text-sm font-p-text">
             {error}
           </p>
         )}
@@ -152,7 +151,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
           disabled={submitting}
           className="rounded-md bg-gray-900 text-white
             px-4 py-3 font-semibold hover:bg-gray-700
-            disabled:opacity-50"
+            disabled:opacity-50 font-p-text"
         >
           {submitting
             ? "Please wait..."
@@ -162,7 +161,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
         </button>
       </form>
 
-      <div className="mt-6 text-center">
+      <div className="mt-6 text-center font-p-text">
         <span>
           {mode === "login"
             ? "Don't have an account?"
@@ -173,7 +172,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
           type="button"
           onClick={handleSwitch}
           disabled={submitting}
-          className="ml-2 font-semibold underline"
+          className="ml-2 font-semibold underline font-p-text"
         >
           {mode === "login" ? "Sign up" : "Sign in"}
         </button>
