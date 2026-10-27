@@ -45,9 +45,21 @@ router.post("/signup", async (req, res, next) => {
       [cleanName, cleanEmail, passwordHash],
     );
 
-    return res.status(201).json({
-      message: "Account created successfully",
-      user: result.rows[0],
+    const user = result.rows[0];
+
+    req.session.regenerate((error) => {
+      if (error) return next(error);
+
+      req.session.userId = user.id;
+
+      req.session.save((error) => {
+        if (error) return next(error);
+
+        return res.status(201).json({
+          message: "Account created and logged in successfully",
+          user,
+        });
+      });
     });
   } catch (error) {
     if (error.code === "23505") {

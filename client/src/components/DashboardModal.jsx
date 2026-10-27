@@ -142,7 +142,7 @@ export default function DashboardModal({ onClose }) {
             {error}
           </p>
         )}
-
+  
         {/* No orders */}
         {!loading && !error && orders.length === 0 && (
           <p className="text-gray-600">You haven't placed any orders yet.</p>

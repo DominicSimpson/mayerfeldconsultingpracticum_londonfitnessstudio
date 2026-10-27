@@ -16,12 +16,27 @@ const requiredFields = [
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
+function isValidBookingDate(value) {
+  if (typeof value !== "string" || !DATE_RE.test(value)) {
+    return false;
+  }
+
+  const [year, month, day] = value.split("-").map(Number);
+
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+}
 router.get("/my-orders", async (req, res, next) => {
   // Only authenticated users can access their order history
   const userId = req.session?.userId;
 
   if (!userId) {
-    return res.status(400).json({
+    return res.status(401).json({
       error: "You must be signed in to view your orders",
     });
   }
@@ -88,7 +103,13 @@ router.post("/", async (req, res, next) => {
   }
 
   for (const item of items) {
-    if (typeof item.id !== "string") {
+    if (
+      !item ||
+      typeof item !== "object" ||
+      Array.isArray(item) ||
+      typeof item.id !== "string" ||
+      item.id.trim() === ""
+    ) {
       return res.status(400).json({ error: "Invalid item" });
     }
 
@@ -100,11 +121,10 @@ router.post("/", async (req, res, next) => {
       return res.status(400).json({ error: "Invalid quantity" });
     }
 
-    if (
-      item.date != null &&
-      (typeof item.date !== "string" || !DATE_RE.test(item.date))
-    ) {
-      return res.status(400).json({ error: "Invalid booking date" });
+    if (item.date != null && !isValidBookingDate(item.date)) {
+      return res.status(400).json({
+        error: "Invalid booking date",
+      });
     }
   }
 

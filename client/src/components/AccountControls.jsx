@@ -6,7 +6,7 @@ import DashboardModal from "./DashboardModal.jsx";
 function AccountControls() {
   const { user, loading, logout } = useAuth();
 
-  const [authMode, setAuthMode] = useState(false);
+  const [authMode, setAuthMode] = useState(null);
   const [dashboardOpen, setDashboardOpen] = useState(false);
   const [logoutError, setLogoutError] = useState("");
   const [signingOut, setSigningOut] = useState(false);
@@ -37,7 +37,6 @@ function AccountControls() {
             <button
               type="button"
               onClick={() => {
-                console.log("My Dashboard button clicked");
                 setDashboardOpen(true);
               }}
               className="rounded-md border border-white

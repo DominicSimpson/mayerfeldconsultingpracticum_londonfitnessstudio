@@ -10,7 +10,6 @@ import authRouter from "../routes/auth.js";
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { aborted } from "node:util";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
