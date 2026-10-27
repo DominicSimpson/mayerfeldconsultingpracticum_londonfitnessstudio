@@ -19,7 +19,6 @@ function BookingForm({ itemId, itemTitle, price }) {
       hour: selectedHour,
     });
     setConfirmation(`${itemTitle} added to your cart.`);
-    console.log("date being added:", selectedDate, typeof selectedDate);
   }
 
   return (

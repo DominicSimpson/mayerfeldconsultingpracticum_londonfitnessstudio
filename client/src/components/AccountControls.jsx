@@ -1,15 +1,10 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import AuthModal from "./AuthModal";
-import DashboardModal from "./DashboardModal";
+import DashboardModal from "./DashboardModal.jsx";
 
 function AccountControls() {
   const { user, loading, logout } = useAuth();
-
-  console.log("AccountControls authentication state:", {
-    user,
-    loading,
-  });
 
   const [authMode, setAuthMode] = useState(false);
   const [dashboardOpen, setDashboardOpen] = useState(false);
@@ -36,12 +31,15 @@ function AccountControls() {
     <>
       {!loading &&
         (user ? (
-          <div class="flex flex-col gap-2 text-white font-p-text">
+          <div className="flex flex-col gap-2 text-white font-p-text">
             <span className="text-sm">Hi, {user.name}</span>
 
             <button
               type="button"
-              onClick={() => setDashboardOpen(true)}
+              onClick={() => {
+                console.log("My Dashboard button clicked");
+                setDashboardOpen(true);
+              }}
               className="rounded-md border border-white
                     px-3 py-2 hover:bg-white hover:text-black"
             >

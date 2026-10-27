@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 function AuthModal({ mode, onClose, onSwitchMode }) {
-  console.log("AuthModal rendered with mode:", mode);
-
   const { login, signup } = useAuth();
 
   const [name, setName] = useState("");
@@ -44,7 +42,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
       if (mode === "signup") {
         await signup(name, email, password);
       } else {
-      await login(email, password);
+        await login(email, password);
       }
       onClose();
     } catch (err) {
