@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useAuth } from "..context/AuthContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import AuthModal from "./AuthModal";
 import DashboardModal from "./DashboardModal";
 
 function AccountControls() {
-  const [user, loading, logout] = useAuth();
+  const { user, loading, logout } = useAuth();
 
   const [authMode, setAuthMode] = useState(false);
   const [dashboardOpen, setDashboardOpen] = useState(false);

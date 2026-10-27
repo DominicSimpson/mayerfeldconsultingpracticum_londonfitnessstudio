@@ -8,12 +8,13 @@ export function AuthProvider({ children }) {
 
   // Check whether the user is already logged in
   useEffect(() => {
-    let cancelled = false;
+    const controller = new AbortController();
 
     async function checkSession() {
       try {
         const response = await fetch("/api/auth/me", {
           credentials: "include",
+          signal: controller.signal,
         });
 
         if (!response.ok) {
@@ -22,17 +23,16 @@ export function AuthProvider({ children }) {
 
         const data = await response.json();
 
-        if (!cancelled) {
+        if (!controller.signal.aborted) {
           setUser(data.user);
         }
       } catch (error) {
-        console.error("Session check failed:", error);
-
-        if (!cancelled) {
+        if (!controller.signal.aborted) {
+          console.error("Session check failed:", error);
           setUser(null);
         }
       } finally {
-        if (!cancelled) {
+        if (!controller.signal.aborted) {
           setLoading(false);
         }
       }
@@ -40,9 +40,7 @@ export function AuthProvider({ children }) {
 
     checkSession();
 
-    return () => {
-      cancelled = true;
-    };
+    return () => controller.abort();
   }, []);
 
   // Sign up
@@ -61,6 +59,8 @@ export function AuthProvider({ children }) {
     if (!response.ok) {
       throw new Error(data.error || "Signup failed");
     }
+
+    setUser(data.user);
 
     return data.user;
   }

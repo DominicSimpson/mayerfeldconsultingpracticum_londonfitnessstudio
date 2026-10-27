@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "./AuthContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function DashboardModal({ isOpen, onClose }) {
   const { user } = useAuth();

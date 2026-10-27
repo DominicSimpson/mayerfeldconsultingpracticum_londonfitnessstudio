@@ -72,7 +72,7 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
       className="fixed inset-0 m-auto w-96 max-w-[90vw]
         rounded-xl bg-white p-6 text-black shadow-xl
         border border-gray-400 backdrop:bg-black/60"
-      aria-labelledby="auth-modal-title font-p-text"
+      aria-labelledby="auth-modal-title"
     >
       <div className="flex items-center justify-between mb-6">
         <h2 id="auth-modal-title" className="text-2xl font-bold font-p-text">
