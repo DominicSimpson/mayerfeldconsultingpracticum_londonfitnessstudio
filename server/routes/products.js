@@ -4,7 +4,7 @@ import { pool } from "../db/pool.js";
 const router = Router();
 
 const columns = `
-    id, 
+    id,
     category, 
     title, 
     description AS text, 

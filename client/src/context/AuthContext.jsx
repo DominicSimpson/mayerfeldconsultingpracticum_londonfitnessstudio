@@ -23,6 +23,8 @@ export function AuthProvider({ children }) {
 
         const data = await response.json();
 
+        console.log("Session data:", data);
+
         if (!controller.signal.aborted) {
           setUser(data.user);
         }
@@ -32,8 +34,14 @@ export function AuthProvider({ children }) {
           setUser(null);
         }
       } finally {
+        console.log("Session check finished");
+
         if (!controller.signal.aborted) {
+          console.log("Setting loading to false");
+
           setLoading(false);
+        } else {
+          console.log("Session check was aborted");
         }
       }
     }

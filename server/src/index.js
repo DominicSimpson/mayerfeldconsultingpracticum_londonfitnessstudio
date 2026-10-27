@@ -10,6 +10,7 @@ import authRouter from "../routes/auth.js";
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { aborted } from "node:util";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -55,9 +56,10 @@ app.use(
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 20,
-  standardHeaders: "draft-8",
+  standardHeaders: "draft-7",
   legacyHeaders: false,
 });
+console.log("Rate limiter configuration loaded");
 
 // Health check
 app.get("/api/health", (req, res) => {
@@ -67,7 +69,13 @@ app.get("/api/health", (req, res) => {
 // API routes
 app.use("/api/products", productsRouter);
 app.use("/api/orders", ordersRouter);
-app.use("/api/auth", authLimiter, authRouter);
+
+// Apply rate limiting to login and signup
+app.use("/api/auth/login", authLimiter);
+app.use("/api/auth/signup", authLimiter);
+
+// Mount authentication routes
+app.use("/api/auth", authRouter);
 
 // Serve React frontend in production
 if (isProduction) {

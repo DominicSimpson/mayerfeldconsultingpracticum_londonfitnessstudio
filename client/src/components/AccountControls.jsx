@@ -6,6 +6,11 @@ import DashboardModal from "./DashboardModal";
 function AccountControls() {
   const { user, loading, logout } = useAuth();
 
+  console.log("AccountControls authentication state:", {
+    user,
+    loading,
+  });
+
   const [authMode, setAuthMode] = useState(false);
   const [dashboardOpen, setDashboardOpen] = useState(false);
   const [logoutError, setLogoutError] = useState("");

@@ -16,6 +16,55 @@ const requiredFields = [
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
+router.get("/my-orders", async (req, res, next) => {
+  // Only authenticated users can access their order history
+  const userId = req.session?.userId;
+
+  if (!userId) {
+    return res.status(400).json({
+      error: "You must be signed in to view your orders",
+    });
+  }
+
+  try {
+    const { rows } = await pool.query(
+      `
+      SELECT
+        o.id,
+        o.created_at,
+        o.total_price,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'productId', oi.product_id,
+              'productName', p.title,
+              'quantity', oi.quantity,
+              'unitPrice', oi.unit_price,
+              'date', oi.date,
+              'hour', oi.hour
+            )
+            ORDER BY oi.id
+          ) FILTER (WHERE oi.id IS NOT NULL),
+          '[]'::json
+        ) AS items 
+      FROM orders o
+      LEFT JOIN order_items oi
+        ON oi.order_id = o.id
+      LEFT JOIN products p
+        ON p.id = oi.product_id
+      WHERE o.user_id = $1
+      GROUP BY o.id, o.created_at, o.total_price
+      ORDER BY o.created_at DESC, o.id DESC 
+      `,
+      [userId],
+    );
+
+    res.json({ orders: rows });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post("/", async (req, res, next) => {
   const { customer, items } = req.body ?? {};
 
@@ -105,7 +154,7 @@ router.post("/", async (req, res, next) => {
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING id`,
       [
-        req.session.userId ?? null,
+        req.session?.userId ?? null,
         customer.firstName.trim(),
         customer.surname.trim(),
         customer.firstLineAddress.trim(),

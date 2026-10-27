@@ -43,8 +43,9 @@ function AuthModal({ mode, onClose, onSwitchMode }) {
     try {
       if (mode === "signup") {
         await signup(name, email, password);
-      }
+      } else {
       await login(email, password);
+      }
       onClose();
     } catch (err) {
       setError(err.message || "Something went wrong");
