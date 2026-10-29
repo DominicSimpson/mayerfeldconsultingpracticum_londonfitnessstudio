@@ -9,11 +9,19 @@ import OpeningTimes from "./components/OpeningTimes";
 import Cart from "./components/Cart";
 import ScrollDown from "./components/ScrollDown";
 import ScrollUp from "./components/ScrollUp";
+import { useState } from "react";
+import AuthModal from "./components/AuthModal.jsx";
 
 function App() {
+  const [authMode, setAuthMode] = useState(null);
+
+  const openAuthModal = (mode = "login") => {
+    setAuthMode(mode);
+  };
+
   return (
     <>
-      <Header />
+      <Header openAuthModal={openAuthModal} />
 
       <main className="flex flex-col w-full max-w-275 mx-auto py-8 px-8 items-center gap-6">
         <figure className="block w-full max-w-250">
@@ -39,11 +47,19 @@ function App() {
         <Membership />
         <OpeningTimes />
       </main>
-      <Cart />
+      <Cart openAuthModal={openAuthModal} />
 
       <Footer />
       <ScrollUp />
       <ScrollDown />
+
+      {authMode && (
+        <AuthModal
+          mode={authMode}
+          onClose={() => setAuthMode(null)}
+          onSwitchMode={setAuthMode} 
+          />
+      )}
     </>
   );
 }

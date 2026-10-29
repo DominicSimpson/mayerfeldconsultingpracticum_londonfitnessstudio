@@ -9,7 +9,7 @@ const gbp = new Intl.NumberFormat("en-GB", {
   currency: "GBP",
 });
 
-function Cart() {
+function Cart({ openAuthModal }) {
   const {
     items,
     removeItem,
@@ -146,6 +146,17 @@ function Cart() {
                 <Paragraph>
                   You must be signed in before you can proceed to checkout.
                 </Paragraph>
+
+                <button
+                type="button"
+                onClick={() => {
+                  setIsCartOpen(false);
+                  openAuthModal("login");
+                }}
+                className="rounded-md bg-black px-4 py-2 font-p-text text-white hover:bg-gray-800"
+                >
+                  Sign in to checkout
+                </button>
               </div>
             ) : (
               <AddressForm

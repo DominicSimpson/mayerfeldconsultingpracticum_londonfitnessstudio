@@ -2,7 +2,7 @@ import logo from "../assets/logo/lfs_logo.png";
 import { useCart } from "./CartContext.jsx";
 import AccountControls from "./AccountControls.jsx";
 
-function Header() {
+function Header({ openAuthModal }) {
   const { totalItems, setIsCartOpen } = useCart();
 
   return (
@@ -36,7 +36,7 @@ function Header() {
         className="[grid-area:controls] justify-self-end 
           flex flex-wrap items-center justify-end gap-3"
       >
-        <AccountControls />
+        <AccountControls openAuthModal={openAuthModal} />
 
         <button
           type="button"

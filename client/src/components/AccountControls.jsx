@@ -3,10 +3,9 @@ import { useAuth } from "../context/AuthContext.jsx";
 import AuthModal from "./AuthModal";
 import DashboardModal from "./DashboardModal.jsx";
 
-function AccountControls() {
+function AccountControls({ openAuthModal }) {
   const { user, loading, logout } = useAuth();
 
-  const [authMode, setAuthMode] = useState(null);
   const [dashboardOpen, setDashboardOpen] = useState(false);
   const [logoutError, setLogoutError] = useState("");
   const [signingOut, setSigningOut] = useState(false);
@@ -61,7 +60,7 @@ function AccountControls() {
           <div className="flex flex-col gap-2 text-white font-p-text">
             <button
               type="button"
-              onClick={() => setAuthMode("login")}
+              onClick={() => openAuthModal("login")}
               className="rounded-md border border-white px-3 py-2 hover:bg-white hover:text-black"
             >
               Sign in
@@ -69,9 +68,8 @@ function AccountControls() {
 
             <button
               type="button"
-              onClick={() => setAuthMode("signup")}
-              className="rounded-md bg-white text-black
-            px-3 py-2 hover:bg-gray-200"
+              onClick={() => openAuthModal("signup")}
+              className="rounded-md bg-white text-black px-3 py-2 hover:bg-gray-200"
             >
               Sign up
             </button>
@@ -82,14 +80,6 @@ function AccountControls() {
         <p role="alert" className="text-red-200 text-sm font-p-text">
           {logoutError}
         </p>
-      )}
-
-      {authMode && (
-        <AuthModal
-          mode={authMode}
-          onClose={() => setAuthMode(null)}
-          onSwitchMode={setAuthMode}
-        />
       )}
 
       {dashboardOpen && user && (
