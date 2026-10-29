@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {useAuth} from "..context/AuthContext.jsx";
+import {useAuth} from "../context/AuthContext.jsx";
 import { useCart } from "./CartContext.jsx";
 import Paragraph from "./Paragraph.jsx";
 import AddressForm from "./AddressForm.jsx";
