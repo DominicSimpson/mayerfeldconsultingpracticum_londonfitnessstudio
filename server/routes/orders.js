@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { pool } from "../db/pool.js";
+import { requireAuth } from "../middleware/requireAuth.js";
 
 const router = Router();
 
@@ -31,15 +32,11 @@ function isValidBookingDate(value) {
     date.getUTCDate() === day
   );
 }
-router.get("/my-orders", async (req, res, next) => {
+router.get("/my-orders", requireAuth, async (req, res, next) => {
   // Only authenticated users can access their order history
-  const userId = req.session?.userId;
+  const userId = req.session.userId;
 
-  if (!userId) {
-    return res.status(401).json({
-      error: "You must be signed in to view your orders",
-    });
-  }
+ 
 
   try {
     const { rows } = await pool.query(
@@ -80,7 +77,7 @@ router.get("/my-orders", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", requireAuth, async (req, res, next) => {
   const { customer, items } = req.body ?? {};
 
   // Validate the request //

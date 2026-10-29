@@ -5,7 +5,9 @@ import { sql } from "drizzle-orm"
 
 export const orders = pgTable("orders", {
     id: serial().primaryKey().notNull(),
-    userId: text("user_id"),
+    userId: integer("user_id")
+        .notNull()
+        .references(() => users.id, { onDelete: "restrict" }),
     firstName: text("first_name").notNull(),
     surname: text().notNull(),
     firstLineAddress: text("first_line_address").notNull(),
@@ -18,7 +20,10 @@ export const orders = pgTable("orders", {
     totalPrice: numeric("total_price", { precision: 10, scale:  2 }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
-    index("idx_orders_user_created").using("btree", table.userId.asc().nullsLast().op("text_ops"), table.createdAt.desc().nullsFirst().op("text_ops")),
+    index("idx_orders_user_created").on(
+        table.userId, 
+        table.createdAt.desc()
+    ),
 ]);
 
 export const orderItems = pgTable("order_items", {
