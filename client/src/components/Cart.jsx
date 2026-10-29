@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import {useAuth} from "..context/AuthContext.jsx";
 import { useCart } from "./CartContext.jsx";
 import Paragraph from "./Paragraph.jsx";
 import AddressForm from "./AddressForm.jsx";
@@ -18,6 +19,8 @@ function Cart() {
     setIsCartOpen,
     clearCart,
   } = useCart();
+
+  const {user, loading} = useAuth();
 
   const [orderId, setOrderId] = useState(null);
 
@@ -135,12 +138,23 @@ function Cart() {
             <p className="font-p-text text-lg font-bold">
               Total: {gbp.format(totalPrice)}
             </p>
-            <AddressForm
-              onOrderPlaced={(id) => {
-                clearCart();
-                setOrderId(id);
-              }}
-            />
+
+            {loading ? (
+              <Paragraph>Checking your sign-in status...</Paragraph>
+            ) : !user ? (
+              <div className="rounded-md border border-black/20 p-4">
+                <Paragraph>
+                  You must be signed in before you can proceed to checkout.
+                </Paragraph>
+              </div>
+            ) : (
+              <AddressForm
+                onOrderPlaced={(id) => {
+                  clearCart();
+                  setOrderId(id);
+                }}
+              />
+            )}
           </>
         )}
       </aside>
