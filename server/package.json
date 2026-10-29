@@ -15,5 +15,8 @@
     "express-rate-limit": "^8.7.1",
     "express-session": "^1.19.0",
     "pg": "^8.23.1"
+  },
+  "allowScripts": {
+    "bcrypt@6.0.0": true
   }
 }
