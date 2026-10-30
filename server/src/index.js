@@ -67,7 +67,6 @@ app.get("/api/health", (req, res) => {
 // API routes
 app.use("/api/products", productsRouter);
 app.use("/api/orders", ordersRouter);
-app.use("/api/auth", authRouter);
 app.use("/api/checkout", checkoutRouter);
 
 // Apply rate limiting to login and signup

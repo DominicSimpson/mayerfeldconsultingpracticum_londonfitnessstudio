@@ -22,6 +22,18 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const appUrl = new URL(process.env.APP_URL).origin;
 
 // POST /api/checkout/create-session
+router.use((req, res, next) => {
+      console.log("Checkout session debug:", {
+        sessionID: req.sessionID,
+        userId: res.session?.userId,
+        hasSession: Boolean(req.session),  
+    });
+
+    next();
+
+})
+
+
 router.post("/create-session", requireAuth, async (req, res, next) => {
     try {
     // Create an order with pending_payment status
@@ -34,9 +46,8 @@ router.post("/create-session", requireAuth, async (req, res, next) => {
     // Create a Stripe Checkout Session
     const checkoutSession = await stripe.checkout.sessions.create({
         mode: "payment",
-        payment_method_types: ["card"],
         line_items: lineItems,
-
+        
         client_reference_id: String(orderId),
 
         metadata: {
