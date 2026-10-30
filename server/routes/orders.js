@@ -132,7 +132,7 @@ router.post("/", requireAuth, async (req, res, next) => {
     // Look up real prices from the database
     const ids = [...new Set(items.map((i) => i.id))];
     const { rows: products } = await client.query(
-      "SELECT id, category, price FROM products WHERE id = ANY($1)",
+      "SELECT id, category, title, price FROM products WHERE id = ANY($1)",
       [ids],
     );
     const byId = new Map(products.map((p) => [p.id, p]));
