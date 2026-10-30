@@ -2,14 +2,13 @@ import express from "express";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import { rateLimit } from "express-rate-limit";
-
 import { pool } from "../db/pool.js";
 import productsRouter from "../routes/products.js";
 import ordersRouter from "../routes/orders.js";
 import authRouter from "../routes/auth.js";
-
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import checkoutRouter from "../routes/checkout.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -68,6 +67,8 @@ app.get("/api/health", (req, res) => {
 // API routes
 app.use("/api/products", productsRouter);
 app.use("/api/orders", ordersRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/checkout", checkoutRouter);
 
 // Apply rate limiting to login and signup
 app.use("/api/auth/login", authLimiter);

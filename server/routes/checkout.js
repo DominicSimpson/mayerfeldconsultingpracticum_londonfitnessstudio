@@ -1,5 +1,8 @@
 import {Stripe} from "stripe";
 import { requireAuth } from "../middleware/requireAuth";
+import { Router } from "express";
+
+const router = Router();
 
 if (!process.env.STRIPE_SECRET_KEY) {
     throw new Error("STRIPE SECRET KEY is not configured");
@@ -12,8 +15,7 @@ router.post("/create-session", requireAuth, async (req, res, next) => {
     try {
     // Order validation, database insertion, and Stripe Checkout Session creation
     return res.status(501).json({
-              error: "Checkout session creation is not implemented yet",
-
+        error: "Checkout session creation is not implemented yet",
     });
     } catch (error) {
         next(error);
