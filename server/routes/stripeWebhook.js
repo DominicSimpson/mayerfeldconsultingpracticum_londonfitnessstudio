@@ -18,7 +18,7 @@ router.post("/", async (req, res, next) => {
     const signature = req.headers["stripe-signature"];
 
     let event;
-
+    
     try {
         event = stripe.webhooks.constructEvent(
             req.body,
@@ -40,11 +40,11 @@ try {
     ) {
         const checkoutSession = event.data.object;
 
-        // Only confirm an order after successful payment
+        // Only confirm an order after successful payment   
         if (checkoutSession.payment_status === "paid") {
             const orderId = Number(checkoutSession.metadata?.orderId);
 
-            if (!Number.isSafeInteger(orderId) || orderId < 0) {
+            if (!Number.isSafeInteger(orderId) || orderId <= 0) {
                 throw new Error("Invalid order ID in Stripe webhook");
             }
 
