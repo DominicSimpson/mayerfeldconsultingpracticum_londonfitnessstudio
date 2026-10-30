@@ -15,6 +15,28 @@ const requiredFields = [
   "email",
 ];
 
+const OPENING_HOURS = {
+  monday: { open: 8, close: 22 },
+  tuesday: { open: 8, close: 22 },
+  wednesday: { open: 8, close: 22 },
+  thursday: { open: 8, close: 22 },
+  friday: { open: 8, close: 22 },
+  saturday: { open: 8, close: 21 },
+  sunday: { open: 8, close: 18 },
+};
+
+const VALID_HOURS_BY_DAY = Object.fromEntries(
+  Object.entries(OPENING_HOURS).map(([day, {open, close}]) => [
+    day, 
+    new Set(
+      Array.from(
+        { length: close - open },
+        (_, i) => `${String(open + 1).padStart(2, "0")}:00`
+      )
+    ),
+  ])
+);
+
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 function isValidBookingDate(value) {
