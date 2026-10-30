@@ -4,85 +4,10 @@ import { requireAuth } from "../middleware/requireAuth.js";
 
 const router = Router();
 
-const requiredFields = [
-  "firstName",
-  "surname",
-  "firstLineAddress",
-  "city",
-  "county",
-  "postcode",
-  "country",
-  "email",
-];
-
-const OPENING_HOURS = {
-  monday: { open: 8, close: 22 },
-  tuesday: { open: 8, close: 22 },
-  wednesday: { open: 8, close: 22 },
-  thursday: { open: 8, close: 22 },
-  friday: { open: 8, close: 22 },
-  saturday: { open: 8, close: 21 },
-  sunday: { open: 8, close: 18 },
-};
-
-const BANK_HOLIDAYS = new Set([
-  // When the fitness centre is closed due to Bank Holiday in England & Wales
-
-  // 2026
-  "2026-01-01", // New Year's Day
-  "2026-04-03", // Good Friday
-  "2026-04-06", // Easter Monday
-  "2026-05-04", // Early May bank holiday
-  "2026-05-25", // Spring bank holiday
-  "2026-08-31", // Summer bank holiday
-  "2026-12-25", // Christmas Day
-  "2026-12-28", // Boxing Day (substitute day)
-
-  // 2027
-  "2027-01-01", // New Year's Day
-  "2027-03-26", // Good Friday
-  "2027-03-29", // Easter Monday
-  "2027-05-03", // Early May bank holiday
-  "2027-05-31", // Spring bank holiday
-  "2027-08-30", // Summer bank holiday
-  "2027-12-27", // Christmas Day (substitute day)
-  "2027-12-28", // Boxing Day (substitute day)
-]);
-
-const VALID_HOURS_BY_DAY = Object.fromEntries(
-  Object.entries(OPENING_HOURS).map(([day, {open, close}]) => [
-    day, 
-    new Set(
-      Array.from(
-        { length: close - open },
-        (_, i) => `${String(open + 1).padStart(2, "0")}:00`
-      )
-    ),
-  ])
-);
-
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-
-function isValidBookingDate(value) {
-  if (typeof value !== "string" || !DATE_RE.test(value)) {
-    return false;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-
-  const date = new Date(Date.UTC(year, month - 1, day));
-
-  return (
-    date.getUTCFullYear() === year &&
-    date.getUTCMonth() === month - 1 &&
-    date.getUTCDate() === day
-  );
-}
+// Retrieve orders belonging to the signed-in user:
 router.get("/my-orders", requireAuth, async (req, res, next) => {
   // Only authenticated users can access their order history
   const userId = req.session.userId;
-
- 
 
   try {
     const { rows } = await pool.query(
@@ -91,6 +16,7 @@ router.get("/my-orders", requireAuth, async (req, res, next) => {
         o.id,
         o.created_at,
         o.total_price,
+        o.payment_status,
         COALESCE(
           json_agg(
             json_build_object(
@@ -111,7 +37,7 @@ router.get("/my-orders", requireAuth, async (req, res, next) => {
       LEFT JOIN products p
         ON p.id = oi.product_id
       WHERE o.user_id = $1
-      GROUP BY o.id, o.created_at, o.total_price
+      GROUP BY o.id, o.created_at, o.total_price, o.payment_status
       ORDER BY o.created_at DESC, o.id DESC 
       `,
       [userId],
@@ -123,139 +49,57 @@ router.get("/my-orders", requireAuth, async (req, res, next) => {
   }
 });
 
-router.post("/", requireAuth, async (req, res, next) => {
-  const { customer, items } = req.body ?? {};
+// GET /api/orders/checkout-session/:sessionId
+router.get(
+  "/checkout-session/:sessionId",
+  requireAuth,
+  
+  async (req, res, next) => {
+    try {
+      const { sessionId } = req.params;
+      const userId = req.session.userId;
 
-  // Validate the request //
-  if (!customer || typeof customer !== "object") {
-    return res.status(400).json({ error: "Missing customer details" });
-  }
-
-  for (const field of requiredFields) {
-    if (typeof customer[field] !== "string" || customer[field].trim() === "") {
-      return res.status(400).json({ error: `Missing field: ${field}` });
-    }
-  }
-
-  if (!/^\S+@\S+\.\S+$/.test(customer.email.trim())) {
-    return res.status(400).json({ error: "Invalid email address" });
-  }
-
-  if (!Array.isArray(items) || items.length === 0 || items.length > 50) {
-    return res.status(400).json({ error: "Cart is empty or too large" });
-  }
-
-  for (const item of items) {
-    if (
-      !item ||
-      typeof item !== "object" ||
-      Array.isArray(item) ||
-      typeof item.id !== "string" ||
-      item.id.trim() === ""
-    ) {
-      return res.status(400).json({ error: "Invalid item" });
-    }
-
-    if (
-      !Number.isInteger(item.quantity) ||
-      item.quantity < 1 ||
-      item.quantity > 20
-    ) {
-      return res.status(400).json({ error: "Invalid quantity" });
-    }
-
-    if (item.date != null && !isValidBookingDate(item.date)) {
-      return res.status(400).json({
-        error: "Invalid booking date",
-      });
-    }
-  }
-
-  let client;
-  try {
-    client = await pool.connect();
-
-    // Look up real prices from the database
-    const ids = [...new Set(items.map((i) => i.id))];
-    const { rows: products } = await client.query(
-      "SELECT id, category, title, price FROM products WHERE id = ANY($1)",
-      [ids],
-    );
-    const byId = new Map(products.map((p) => [p.id, p]));
-
-    let totalPence = 0;
-    const lines = [];
-    for (const item of items) {
-      const product = byId.get(item.id);
-      if (!product) {
-        return res.status(400).json({ error: `Unknown product: ${item.id}` });
+      if (typeof sessionId !== "string" || !sessionId.startsWith("cs_")) {
+        return res.status(400).json({
+          error: "Invalid Checkout Session ID",
+        });
       }
-      // Facilities and services are bookings, so they need a date and hour
-      if (product.category !== "membership" && (!item.date || !item.hour)) {
-        return res
-          .status(400)
-          .json({ error: `Missing booking time for ${item.id}` });
-      }
-      const unitPence = Math.round(Number(product.price) * 100);
-      totalPence += unitPence * item.quantity;
-      lines.push({
-        productId: item.id,
-        quantity: item.quantity,
-        unitPrice: (unitPence / 100).toFixed(2),
-        date: item.date ?? null,
-        hour: item.hour ?? null,
-      });
-    }
-    // ---- Save everything or nothing ----
-    await client.query("BEGIN");
 
-    const { rows } = await client.query(
-      `INSERT INTO orders
-        (user_id, first_name, surname, first_line_address, 
-        second_line_address, city, county, postcode, 
-        country, email, total_price)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-        RETURNING id`,
-      [
-        req.session?.userId ?? null,
-        customer.firstName.trim(),
-        customer.surname.trim(),
-        customer.firstLineAddress.trim(),
-        customer.secondLineAddress?.trim() ?? null,
-        customer.city.trim(),
-        customer.county.trim(),
-        customer.postcode.trim(),
-        customer.country.trim(),
-        customer.email.trim(),
-        (totalPence / 100).toFixed(2),
-      ],
-    );
-    const orderId = rows[0].id;
-
-    for (const l of lines) {
-      await client.query(
-        `INSERT INTO order_items
-            (order_id, product_id, quantity, unit_price, date, hour)
-            VALUES ($1, $2, $3, $4, $5, $6)`,
-        [orderId, l.productId, l.quantity, l.unitPrice, l.date, l.hour],
+      const { rows } = await pool.query(
+          `
+          SELECT
+            id,
+            total_price,
+            payment_status,
+            created_at
+          FROM orders
+          WHERE stripe_checkout_session_id = $1
+            AND user_id = $2
+          LIMIT 1
+          `,
+        [sessionId, userId],
       );
+
+      if (rows.length === 0) {
+        return res.status(404).json({
+          error: "Order not found",
+        });
+      }
+
+      return res.json({
+        order: rows[0],
+      });
+    } catch (error) {
+      next (error);
     }
+  },
+);
 
-    await client.query("COMMIT");
-
-    res.status(201).json({
-      orderId,
-      total: totalPence / 100,
-    });
-  } catch (err) {
-    if (client) {
-      await client.query("ROLLBACK").catch(() => {});
-    }
-
-    next(err);
-  } finally {
-    client?.release();
-  }
+router.post("/", requireAuth, (req, res) => {
+  res.status(410).json({
+    error:
+      "Direct order creation is no longer supported. Please use Stripe Checkout.",
+  });
 });
 
 export default router;

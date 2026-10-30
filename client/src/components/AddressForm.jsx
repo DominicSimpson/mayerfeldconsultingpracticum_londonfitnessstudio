@@ -32,7 +32,7 @@ const fields = [
 
 const initialFormData = Object.fromEntries(fields.map((f) => [f.name, ""]));
 
-export default function AddressForm({ onOrderPlaced }) {
+export default function AddressForm() {
   const { items } = useCart();
   const [formData, setFormData] = useState(initialFormData);
   const [status, setStatus] = useState({ state: "idle", message: "" });
@@ -44,11 +44,16 @@ export default function AddressForm({ onOrderPlaced }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setStatus({ state: "submitting", message: "" });
+    
     try {
-      const res = await fetch("/api/orders", {
+      const res = await fetch("/api/checkout/create-session", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        headers: { 
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           customer: formData,
           items: items.map(({ id, quantity, date, hour }) => ({
@@ -59,14 +64,24 @@ export default function AddressForm({ onOrderPlaced }) {
           })),
         }),
       });
+
       const data = await res.json().catch(() => ({}));
 
-      if (!res.ok) throw new Error(data.error || "Checkout failed");
+      if (!res.ok) {
+        throw new Error(data.error || "Unable to start Stripe Checkout");
+      }
 
-      setFormData(initialFormData);
-      onOrderPlaced(data.orderId);
+      if (!data.url) {
+        throw new Error("Stripe Checkout URL was not returned");
+      }
+
+      // Redirect the customer to Stripe's hosted payment page:
+      window.location.assign(data.url);
     } catch (err) {
-      setStatus({ state: "error", message: err.message });
+      setStatus({ 
+        state: "error", 
+        message: err.message || "Something went wrong",
+      });
     }
   };
 
@@ -99,8 +114,8 @@ export default function AddressForm({ onOrderPlaced }) {
           className="font-p-text font-bold border border-black/25 rounded-md px-6 py-2 hover:bg-black/5 bg-sky-500 disabled:opacity-50"
         >
           {status.state === "submitting"
-            ? "Placing order..."
-            : "Confirm Checkout"}
+            ? "Redirecting to payment..."
+            : "Proceed to payment"}
         </button>
         {status.state === "error" && (
           <p role="alert" className="text-red-700">

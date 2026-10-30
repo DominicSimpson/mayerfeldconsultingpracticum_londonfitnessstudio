@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {useAuth} from "../context/AuthContext.jsx";
 import { useCart } from "./CartContext.jsx";
 import Paragraph from "./Paragraph.jsx";
@@ -22,8 +22,6 @@ function Cart({ openAuthModal }) {
 
   const {user, loading} = useAuth();
 
-  const [orderId, setOrderId] = useState(null);
-
   const isEmpty = items.length === 0;
 
   // Close the drawer with the Escape key (unchanged)
@@ -39,10 +37,6 @@ function Cart({ openAuthModal }) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isCartOpen, setIsCartOpen]);
 
-  // Reset the confirmation when something new is added
-  useEffect(() => {
-    if (items.length > 0) setOrderId(null);
-  }, [items.length]);
 
   return (
     <>
@@ -76,9 +70,7 @@ function Cart({ openAuthModal }) {
           </button>
         </div>
 
-        {orderId ? (
-          <Paragraph>Thank you! Your order number is {orderId}.</Paragraph>
-        ) : isEmpty ? (
+        {isEmpty ? (
           <Paragraph>Your cart is empty.</Paragraph>
         ) : (
           <>
@@ -159,12 +151,7 @@ function Cart({ openAuthModal }) {
                 </button>
               </div>
             ) : (
-              <AddressForm
-                onOrderPlaced={(id) => {
-                  clearCart();
-                  setOrderId(id);
-                }}
-              />
+              <AddressForm />
             )}
           </>
         )}
