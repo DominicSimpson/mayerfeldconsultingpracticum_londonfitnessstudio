@@ -47,8 +47,6 @@ const BANK_HOLIDAYS = new Set([
   "2027-08-30", // Summer bank holiday
   "2027-12-27", // Christmas Day (substitute day)
   "2027-12-28", // Boxing Day (substitute day)
-
-
 ]);
 
 const VALID_HOURS_BY_DAY = Object.fromEntries(
