@@ -59,6 +59,8 @@ const BANK_HOLIDAYS = new Set([
   "2027-12-28", // Boxing Day (substitute day)
 ]);
 
+// Helper functions
+
 function isValidBookingDate(value) {
     if (typeof value !== "string" || !DATE_RE.test(value)) {
         return false;
@@ -74,6 +76,35 @@ function isValidBookingDate(value) {
     );
 }
 
+function isPastBookingSlot(dateString, hourString) {
+    const now = new Date();
+
+        const londonDate = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "Europe/London",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }).format(now);
+
+        const londonHour = Number(
+            new Intl.DateTimeFormat("en-GB", {
+            timeZone: "Europe/London",
+            hour: "2-digit",
+            hourCycle: "h23",    
+        }).format(now)
+    );
+
+    if (dateString < londonDate) {
+        return true;
+    }
+
+    if (dateString > londonDate) {
+        return false;
+    }
+
+    return Number(hourString.slice(0, 2)) <= londonHour;
+}
+
 export class OrderValidationError extends Error {
     constructor(message) {
         super(message);
@@ -81,6 +112,33 @@ export class OrderValidationError extends Error {
         this.status = 400;
     }
 }
+
+function priceToPence(price) {
+    const priceString = String(price);
+
+    if (!/^\d+\.\d{2}$/.test(priceString)) {
+        throw new OrderValidationError("Invalid product price");
+    }
+
+    const [pounds, pence] = priceString.split(".");
+
+    const totalPence = Number(pounds) * 100 + Number(pence);
+
+    if (!Number.isSafeInteger(totalPence) || totalPence <= 0) {
+        throw new OrderValidationError("Invalid product price");
+    }
+
+    return totalPence;
+}
+
+function penceToPounds(pence) {
+    const pounds = Math.floor(pence / 100);
+    const remainingPence = pence % 100;
+
+    return `${pounds}.${String(remainingPence).padStart(2, "0")}`;
+}
+
+// Main function for creating order
 
 export async function createPendingOrder({ userId, customer, items }) {
     if (!userId) {
@@ -132,91 +190,207 @@ export async function createPendingOrder({ userId, customer, items }) {
         }
     }
 
-    const ids = [...new Set(items.map((item) => item.id))];
-
-    const { rows: products } = await pool.query(
-        `
-        SELECT id, category, title, price
-        FROM products
-        WHERE id = ANY($1)
-        `,
-        [ids],
-    );
-
-    const byId = new Map(products.map((product) => [product.id, product]));
-
-    let totalPence = 0;
-    const lines = [];
-    const lineItems = [];
+    const seenItems = new Set();
 
     for (const item of items) {
-        const product = byId.get(item.id);
+        const key = JSON.stringify([
+            item.id,
+            item.date ?? null,
+            item.hour ?? null,
+        ]);
 
-        if (!product) { 
-            throw new OrderValidationError(`Unknown product: ${item.id}`);
-        };
-
-        if (product.category !== "membership") {
-            if (!item.date || !isValidBookingDate(item.date)) {
-                throw new OrderValidationError(
-                    `Invalid booking date for ${item.id}`
-                );
-            }
-        
-
-            const day = getBookingDay(item.date);
-            const validHours = VALID_HOURS_BY_DAY[day];
-
-            if (!validHours.has(item.hour)) {
-                throw new OrderValidationError(
-                `Invalid booking time for ${item.id} on ${day}`
-                );
-            }
-
-            if (BANK_HOLIDAYS.has(item.date)) {
-                throw new OrderValidationError(
-                    "The fitness centre is closed on bank holidays"
-                );
-            }
-        }
-
-        const unitPence = Math.round(Number(product.price) * 100);
-
-        if (!Number.isSafeInteger(unitPence) || unitPence <= 0) {
+        if (seenItems.has(key)) {
             throw new OrderValidationError(
-                `Invalid price for product: ${item.id}`
+                `Duplicate cart item: ${item.id}`
             );
         }
 
-
-
-        totalPence += unitPence * item.quantity;
-
-        lines.push({
-            productId: item.id,
-            quantity: item.quantity,
-            unitPrice: (unitPence / 100).toFixed(2),
-            date: item.date ?? null,
-            hour: item.hour ?? null,
-        });
-
-        lineItems.push({
-            price_data: {
-                currency: "gbp",
-                product_data: {
-                    name: product.title,
-                },
-                unit_amount: unitPence,
-            }, 
-            quantity: item.quantity,
-        });
+        seenItems.add(key);
     }
 
-    return {
-        totalPence,
-        lines,
-        lineItems,
-    };
+    const ids = [...new Set(items.map((item) => item.id))];
+
+    let client;
+
+    try {
+        client = await pool.connect();
+
+        const { rows: products } = await client.query(
+            `
+            SELECT id, category, title, price
+            FROM products
+            WHERE id = ANY($1)
+            `,
+            [ids],
+        );
+
+        const byId = new Map(
+            products.map((product) => [product.id, product]),
+        );
+
+        let totalPence = 0;
+        const lines = [];
+        const lineItems = [];
+
+        for (const item of items) {
+            const product = byId.get(item.id);
+
+            if (!product) {
+                throw new OrderValidationError(`Unknown product: ${item.id}`);
+            }
+
+            if (product.category !== "membership") {
+                if (!item.date || !isValidBookingDate(item.date)) {
+                    throw new OrderValidationError(
+                        `Invalid booking date for ${item.id}`,
+                    );
+                }
+
+                const day = getBookingDay(item.date);
+                const validHours = VALID_HOURS_BY_DAY[day];
+
+                if (!validHours?.has(item.hour)) {
+                    throw new OrderValidationError(
+                        `Invalid booking time for ${item.id} on ${day}`,
+                    );
+                }
+
+                if (isPastBookingSlot(item.date, item.hour)) {
+                    throw new OrderValidationError(
+                        "You cannot book a date or time in the past"
+                    );
+                }
+
+                if (BANK_HOLIDAYS.has(item.date)) {
+                    throw new OrderValidationError(
+                        "The fitness centre is closed on bank holidays",
+
+                    );
+                }
+            }
+
+            const unitPence = priceToPence(product.price);
+
+            totalPence += unitPence * item.quantity;
+
+            if (!Number.isSafeInteger(totalPence)) {
+                throw new OrderValidationError(
+                    "Invalid order total"
+                );
+            }
+
+            lines.push({
+                productId: item.id,
+                quantity: item.quantity,
+                unitPrice: penceToPounds(unitPence),
+                date: product.category === "membership" ? null : item.date,
+                hour: product.category === "membership" ? null : item.hour,
+            });
+
+            lineItems.push({
+                price_data: {
+                    currency: "gbp",
+                    product_data: {
+                        name: product.title,
+                    },
+                    unit_amount: unitPence,
+                },
+                quantity: item.quantity,
+            });
+        }
+
+       
+        // Begin the database transaction
+        await client.query("BEGIN");
+
+        const { rows } = await client.query(
+            `
+            INSERT INTO orders (
+                user_id,
+                first_name,
+                surname,
+                first_line_address,
+                second_line_address,
+                city,
+                county,
+                postcode,
+                country,
+                email,
+                total_price,
+                payment_status
+            )
+            VALUES (
+                $1, $2, $3, $4, $5, $6,
+                $7, $8, $9, $10, $11, $12
+            )
+            RETURNING id
+            `,
+            [
+                userId,
+                customer.firstName.trim(),
+                customer.surname.trim(),
+                customer.firstLineAddress.trim(),
+                typeof customer.secondLineAddress === "string"
+                    ? customer.secondLineAddress.trim()
+                    : null,
+                customer.city.trim(),
+                customer.county.trim(),
+                customer.postcode.trim(),
+                customer.country.trim(),
+                customer.email.trim(),
+                penceToPounds(totalPence),
+                "pending_payment",
+            ],
+        );
+
+        const orderId = rows[0].id;
+
+        for (const line of lines) {
+            await client.query(
+                `
+                INSERT INTO order_items (
+                    order_id,
+                    product_id,
+                    quantity,
+                    unit_price,
+                    date,
+                    hour
+                )
+                VALUES ($1, $2, $3, $4, $5, $6)
+                `,
+                [
+                    orderId,
+                    line.productId,
+                    line.quantity,
+                    line.unitPrice,
+                    line.date,
+                    line.hour,
+                ],
+            );
+        }
+
+        // Commit only after all inserts succeed
+        await client.query("COMMIT");
+
+        return {
+            orderId,
+            totalPence,
+            lineItems,
+        };
+    } catch (error) {
+        if (client) {
+            try {
+                await client.query("ROLLBACK");
+            } catch (rollbackError) {
+                console.log("Failed to roll back order:", rollbackError);
+            }
+        }
+
+        throw error;
+    } finally {
+        client?.release();
+    }
+   
 }
 
 function getBookingDay(dateString) {
