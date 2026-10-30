@@ -9,6 +9,7 @@ import authRouter from "../routes/auth.js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import checkoutRouter from "../routes/checkout.js";
+import stripeWebhookRouter from "../routes/stripeWebhook.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -27,9 +28,17 @@ if (isProduction) {
   app.set("trust proxy", 1);
 }
 
+// Stripe webhook must receive the original request body before express.json():
+app.use(
+  "/api/checkout/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhookRouter
+);
+
 // Parse incoming JSON
 app.use(express.json());
 
+// PostgreSQL-backed sessions
 app.use(
   session({
     store: new PgSession({
