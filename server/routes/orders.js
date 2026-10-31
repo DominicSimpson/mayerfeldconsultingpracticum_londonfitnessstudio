@@ -37,6 +37,7 @@ router.get("/my-orders", requireAuth, async (req, res, next) => {
       LEFT JOIN products p
         ON p.id = oi.product_id
       WHERE o.user_id = $1
+        AND o.payment_status = 'paid'
       GROUP BY o.id, o.created_at, o.total_price, o.payment_status
       ORDER BY o.created_at DESC, o.id DESC 
       `,

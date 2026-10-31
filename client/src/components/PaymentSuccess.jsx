@@ -56,6 +56,8 @@ export default function PaymentSuccess() {
                     if (cancelled) return;
 
                     if (data.order.payment_status === "paid") {
+                        console.log("Payment verified — clearing cart now");
+
                         setOrder(data.order);
                         setStatus("paid");
                         clearCart();
