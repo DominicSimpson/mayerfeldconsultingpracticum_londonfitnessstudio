@@ -43,6 +43,16 @@ export default function PaymentSuccess() {
                         throw new Error(data.error || "Unable to verify payment");
                     }
 
+                    // TEMPORARY TEST: simulate a delayed webhook
+                    if (response.ok && attempt <= 2) {
+                        data.order.payment_status = "pending_payment";
+                    }
+
+                    console.log(
+                        `Payment verification attempt ${attempt}:`,
+                        data.order.payment_status
+                    );
+
                     if (cancelled) return;
 
                     if (data.order.payment_status === "paid") {
