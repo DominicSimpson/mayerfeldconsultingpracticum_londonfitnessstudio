@@ -16,6 +16,8 @@ export default function PaymentSuccess() {
     );
 
     useEffect(() => {
+        console.log("PaymentSuccess effect started");
+
         if (!sessionId) {
             setStatus("error");
             setError("No Stripe Checkout Session ID was provided");
@@ -65,7 +67,7 @@ export default function PaymentSuccess() {
                     }
 
                     if (data.order.payment_status !== "pending_payment") {
-                        setStatus(error);
+                        setStatus("error");
                         setError("This order does not have a pending payment");
                         return;
                     }
@@ -79,7 +81,7 @@ export default function PaymentSuccess() {
                     if (cancelled) return;
 
                     setStatus("error");
-                    setError(err.message);
+                    setError(error.message);
                     return;
                 }
             }
@@ -92,6 +94,8 @@ export default function PaymentSuccess() {
         checkPayment();
 
         return () => {
+            console.log("PaymentSuccess effect cleaned up");
+
             cancelled = true;
             clearTimeout(timeoutId);
         };
