@@ -11,6 +11,7 @@ import ScrollDown from "./components/ScrollDown";
 import ScrollUp from "./components/ScrollUp";
 import { useState } from "react";
 import AuthModal from "./components/AuthModal.jsx";
+import PaymentSuccess from "./components/PaymentSuccess.jsx";
 
 function App() {
   const [authMode, setAuthMode] = useState(null);
@@ -19,11 +20,26 @@ function App() {
     setAuthMode(mode);
   };
 
+  const paymentStatus = new URLSearchParams(
+    window.location.search
+  ).get("payment");
+
   return (
     <>
       <Header openAuthModal={openAuthModal} />
 
       <main className="flex flex-col w-full max-w-275 mx-auto py-8 px-8 items-center gap-6">
+        {paymentStatus === "success" ? (
+          <PaymentSuccess />
+        ) : paymentStatus === "cancelled" ? (
+          <section role="status" className="p-8 text-center">
+            <h2 className="text-2xl font-bold">Payment cancelled</h2>
+            <p className="mt-4">
+              Your payment was not completed. Your shopping cart has been preserved
+            </p>
+          </section>
+        ) : (
+          <>
         <figure className="block w-full max-w-250">
           <img
             className="w-full h-auto"
@@ -46,6 +62,8 @@ function App() {
         <Facilities />
         <Membership />
         <OpeningTimes />
+      </>
+    )}
       </main>
       <Cart openAuthModal={openAuthModal} />
 
