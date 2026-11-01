@@ -5,7 +5,6 @@ import londonNutritionCounsellingPhoto from "../assets/images/services/nutrition
 import londonWellnessProgramsPhoto from "../assets/images/services/wellnessprograms_photo.jpg";
 import BookingForm from "./BookingForm.jsx";
 import { useProducts } from "../useProducts.js";
-import ToggleOption from "./ToggleOption.jsx";
 
 const images = {
   fitness_classes: londonFitnessStudioPhoto,

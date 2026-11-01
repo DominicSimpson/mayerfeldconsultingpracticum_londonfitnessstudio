@@ -6,6 +6,8 @@
  * Built on a native radio input so keyboard navigation (arrow keys,
  * Space) and screen reader semantics work without extra code.
  */
+import QuantitySelector from "./QuantitySelector.jsx";
+
 export default function ToggleOption({
   name,
   value,
@@ -65,43 +67,13 @@ export default function ToggleOption({
       </label>
 
       {onQuantityChange && (
-        <div
-          role="group"
-          aria-label={`${title} quantity`}
-          className="mt-2 self-stretch flex items-center justify-between gap-3"
-        >
-          <span className="font-p-text text-sm font-semibold text-nav-text p-3">
-            Add to Cart
-          </span>
-
-          <div className="mt-2 self-start inline-flex items-center rounded-lg bg-black text-white text-sm font-semibold">
-            <button
-              type="button"
-              onClick={() => onQuantityChange(-1)}
-              aria-label={`Decrease ${title} quantity`}
-              disabled={quantity <= 0}
-              className="py-1 px-3 rounded-l-lg cursor-pointer enabled:hover:brightness-110
-                focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button
-                disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              -
-            </button>
-
-            <span aria-live="polite" className="min-w-6 text-center">
-              {quantity}
-            </span>
-
-            <button
-              type="button"
-              onClick={() => onQuantityChange(1)}
-              aria-label={`Increase ${title} quantity`}
-              className="py-1 px-3 rounded-r-lg cursor-pointer hover:brightness-110
-                focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sign-up-button"
-            >
-              +
-            </button>
-          </div>
-        </div>
+        <QuantitySelector
+          title={title}
+          quantity={quantity}
+          onQuantityChange={onQuantityChange}
+          min={0}
+          max={10}
+        />
       )}
     </div>
   );

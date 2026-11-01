@@ -3,6 +3,7 @@ import DatePicker, { today } from "./DatePicker.jsx";
 import HourPicker from "./HourPicker.jsx";
 import ToggleOption from "./ToggleOption.jsx";
 import { useCart } from "./CartContext.jsx";
+import QuantitySelector from "./QuantitySelector.jsx";
 
 function BookingForm({ itemId, itemTitle, price }) {
   const { addItem } = useCart();
@@ -30,6 +31,12 @@ function BookingForm({ itemId, itemTitle, price }) {
     );
   }
 
+  function handleQuantityChange(delta) {
+    setQuantity((previous) =>
+      Math.max(1, Math.min(previous + delta, 10))
+    );
+}
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -48,9 +55,12 @@ function BookingForm({ itemId, itemTitle, price }) {
         onChange={setSelectedHour} 
       />
 
-      <ToggleOption
+      <QuantitySelector
+        title={itemTitle}
         quantity={quantity}
-        setQuantity={setQuantity}
+        onQuantityChange={handleQuantityChange}
+        min={1}
+        max={10}
       />
 
       <button
@@ -59,7 +69,7 @@ function BookingForm({ itemId, itemTitle, price }) {
       >
         Add to Cart
       </button>
-      
+
       {confirmation && <p role="status">{confirmation}</p>}
     </form>
   );

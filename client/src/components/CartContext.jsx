@@ -31,7 +31,13 @@ export function CartProvider({ children }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   function addItem(item) {
-    changeQuantity(item, 1);
+    const quantity = item.quantity ?? 1;
+
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      return;
+    }
+
+    changeQuantity(item, quantity);
   }
 
   function changeQuantity(item, delta) {
@@ -40,13 +46,26 @@ export function CartProvider({ children }) {
 
       // Not in the cart yet: add it on the first "+"
       if (!existing) {
-        return delta > 0 ? [...prev, { ...item, quantity: 1 }] : prev;
+        return delta > 0
+          ? [
+              ...prev, 
+              { ...item, 
+                quantity: Math.max(0, Math.min(delta, MAX_QUANTITY)),
+              },
+            ] 
+          : prev;
       }
 
       return prev
         .map((i) =>
           sameLine(i, item)
-            ? { ...i, quantity: Math.min(i.quantity + delta, MAX_QUANTITY) }
+            ? { 
+                ...i, 
+                quantity: Math.max(
+                  0,
+                  Math.min(i.quantity + delta, MAX_QUANTITY)
+                ),
+              }
             : i,
         )
         .filter((i) => i.quantity > 0);
