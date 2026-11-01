@@ -54,7 +54,7 @@ function Cart({ openAuthModal }) {
         aria-label="Your cart"
         aria-hidden={!isCartOpen}
         inert={!isCartOpen}
-        className={`fixed top-0 right-0 z-50 h-full w-full max-w-sm overflow-y-auto
+        className={`font-p-text fixed top-0 right-0 z-50 h-full w-full max-w-sm overflow-y-auto
           bg-card p-6 shadow-xl transition-transform duration-200
           flex flex-col gap-4
           ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
@@ -74,6 +74,22 @@ function Cart({ openAuthModal }) {
           <Paragraph>Your cart is empty.</Paragraph>
         ) : (
           <>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => {
+                  if (
+                    window.confirm("Are you sure you want to remove all items from your cart?")
+                  ) {
+                    clearCart();
+                  }
+                }}
+                className="font-p-text text-sm font-bold border border-black/25 rounded-md px-4 py-2 bg-card hover:bg-red-50 hover:border-red-400 transition-colors"
+                >
+                  Remove All
+              </button>
+            </div>
+
             <ul className="flex flex-col gap-4">
               {items.map((item) => (
                 <li
