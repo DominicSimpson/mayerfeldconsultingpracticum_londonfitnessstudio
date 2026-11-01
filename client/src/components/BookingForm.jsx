@@ -1,7 +1,6 @@
-import { useState, useId } from "react";
+import { useState } from "react";
 import DatePicker, { today } from "./DatePicker.jsx";
 import HourPicker from "./HourPicker.jsx";
-import ToggleOption from "./ToggleOption.jsx";
 import { useCart } from "./CartContext.jsx";
 import QuantitySelector from "./QuantitySelector.jsx";
 
@@ -26,21 +25,19 @@ function BookingForm({ itemId, itemTitle, price }) {
       quantity,
     });
 
-    setConfirmation(
-      `${quantity} x ${itemTitle} added to your cart.`
-    );
+    setConfirmation(`${quantity} x ${itemTitle} added to your cart`);
   }
 
   function handleQuantityChange(delta) {
     setQuantity((previous) =>
       Math.max(1, Math.min(previous + delta, 10))
     );
-}
+  }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-auto flex flex-col items-center gap-3 border-t border-black/15 pt-4"
+      className="mt-auto flex w-full flex-col items-center gap-3 border-t border-black/15 pt-4"
     >
       <h4 className="font-service-card font-bold">
         Book Session
@@ -70,7 +67,13 @@ function BookingForm({ itemId, itemTitle, price }) {
         Add to Cart
       </button>
 
-      {confirmation && <p role="status">{confirmation}</p>}
+      <div className="min-h-18 w-full">
+        {confirmation && (
+          <p role="status" className="font-p-text">
+            {confirmation}
+          </p>
+        )}
+      </div>
     </form>
   );
 }

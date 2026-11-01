@@ -18,11 +18,11 @@ export default function ToggleOption({
   price,
   description,
   features = [],
-  quantity = 0,
+  quantity = 1,
   onQuantityChange,
 }) {
   const base =
-    "relative flex flex-col gap-3 p-6 rounded-lg border-2 bg-card cursor-pointer " +
+    "relative flex flex-1 flex-col gap-3 p-6 rounded-lg border-2 bg-card cursor-pointer " +
     "transition-[border-color,box-shadow,opacity,filter] duration-200 " +
     "has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-sign-up-button";
 
@@ -71,7 +71,7 @@ export default function ToggleOption({
           title={title}
           quantity={quantity}
           onQuantityChange={onQuantityChange}
-          min={0}
+          min={1}
           max={10}
         />
       )}

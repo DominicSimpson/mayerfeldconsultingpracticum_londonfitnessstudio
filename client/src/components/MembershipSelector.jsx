@@ -8,24 +8,48 @@ import { useCart } from "./CartContext.jsx";
 export default function MembershipSelector({ tiers }) {
   // The parent owns the selection; the dropdown and each ToggleOption
   // are controlled by it. "" means nothing selected.
+  const { addItem } = useCart();
+
   const [selectedTierId, setSelectedTierId] = useState("");
   const [query, setQuery] = useState("");
-  const [confirmation, setConfirmation] = useState("");
-  const { items, changeQuantity } = useCart();
+  const [confirmations, setConfirmations] = useState({});
+  const [quantities, setQuantities] = useState({});
   const menuOptions = [
     { value: "", label: "Choose a membership..." },
     ...tiers.map((tier) => ({ value: tier.id, label: tier.title })),
   ];
 
   function handleQuantityChange(tier, delta) {
-    changeQuantity(tier, delta);
-    // Only announce additions; clear the message when the quantity goes down
-    setConfirmation(
-      delta > 0
-        ? `${tier.title} added to your cart.`
-        : `${tier.title} removed from your cart.`,
-    );
+    setQuantities((previous) => ({
+      ...previous,
+      [tier.id]: Math.max(
+        1,
+        Math.min((previous[tier.id] ?? 1) + delta, 10)
+      ),
+    }));
+
+    setConfirmations((previous) => ({
+      ...previous,
+      [tier.id]: "",
+    }));
   }
+
+  function handleAddToCart(tier) {
+    const quantity = quantities[tier.id] ?? 1;
+
+    addItem({
+      id: tier.id,
+      title: tier.title,
+      price: tier.price,
+      quantity,
+    });
+
+    setConfirmations((previous) => ({
+      ...previous,
+      [tier.id]: `${quantity} x ${tier.title} added to your cart`,
+    }));
+  }
+
 
   const visibleTiers = tiers.filter((tier) =>
     tier.title.toLowerCase().includes(query.toLowerCase()),
@@ -56,29 +80,44 @@ export default function MembershipSelector({ tiers }) {
       <div
         className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4 font-p-text"
         role="radiogroup"
-        aria-label="Membership options"
-      >
+        aria-label="Membership options">
+
         {visibleTiers.map((tier) => (
-          <ToggleOption
-            key={tier.id}
-            name="membership"
-            value={tier.id}
-            selected={tier.id === selectedTierId}
-            dimmed={selectedTierId !== "" && tier.id !== selectedTierId}
-            onChange={setSelectedTierId}
-            title={tier.title}
-            price={`£${tier.price}`}
-            description={tier.text}
-            features={tier.features}
-            quantity={items.find((item) => item.id === tier.id)?.quantity ?? 0}
-            onQuantityChange={(delta) => handleQuantityChange(tier, delta)}
-          />
+          <div key={tier.id} className="flex h-full flex-col gap-3">
+            <ToggleOption
+              name="membership"
+              value={tier.id}
+              selected={tier.id === selectedTierId}
+              dimmed={selectedTierId !== "" && tier.id !== selectedTierId}
+              onChange={setSelectedTierId}
+              title={tier.title}
+              price={`£${tier.price}`}
+              description={tier.text}
+              features={tier.features}
+              quantity={quantities[tier.id] ?? 1}
+              onQuantityChange={(delta) =>
+                handleQuantityChange(tier, delta)
+              }
+            />
+
+            <button
+              type="button"
+              onClick={() => handleAddToCart(tier)}
+              className="font-p-text font-bold border border-black/25 rounded-md px-6 py-2 bg-card hover:bg-black/5"
+            >
+              Add to Cart
+            </button>
+
+            <div className="min-h-18 w-full">
+              {confirmations[tier.id] && (
+                <p role="status" className="font-p-text">
+                  {confirmations[tier.id]}
+                </p>
+              )}
+            </div>
+          </div>
         ))}
       </div>
-
-      <p role="status" className="text-center font-bold font-p-text">
-        {confirmation}
-      </p>
     </section>
   );
 }
