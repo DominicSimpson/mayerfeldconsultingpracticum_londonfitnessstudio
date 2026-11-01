@@ -20,10 +20,10 @@ export default function Contact() {
         Contact Us
       </h2>
 
-        <p className="font-p-text mt-10 mb-10 text-center">
+        <Paragraph>
           Have a question about our memberships, facilities or
           services? Get in touch using the form below.        
-        </p>
+        </Paragraph>
 
         <form 
             onSubmit={handleSubmit}
