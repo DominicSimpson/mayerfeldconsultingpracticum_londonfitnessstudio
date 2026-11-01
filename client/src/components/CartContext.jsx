@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { 
+  createContext, 
+  useContext, 
+  useState, 
+  useCallback,
+  useEffect, 
+} from "react";
 
 const CartContext = createContext(null);
 const MAX_QUANTITY = 10;
@@ -8,7 +14,20 @@ const sameLine = (a, b) =>
   a.id === b.id && a.date === b.date && a.hour === b.hour;
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    try {
+      const savedCart = sessionStorage.getItem("lfs-cart");
+      const parsedCart = savedCart ? JSON.parse(savedCart) : [];
+      return Array.isArray(parsedCart) ? parsedCart : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("lfs-cart", JSON.stringify(items));
+  }, [items]);
+
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   function addItem(item) {
@@ -42,6 +61,27 @@ export function CartProvider({ children }) {
     setItems([]);
   }, []);
 
+  const clearPurchasedItems = useCallback((purchasedItems) => {
+    setItems((currentItems) =>
+      currentItems
+        .map((currentItem) => { 
+          const purchasedItem = purchasedItems.find((item) => 
+            sameLine(currentItem, item)
+          );
+
+          if (!purchasedItem) {
+            return currentItem;
+          }
+
+          return { 
+            ...currentItem, 
+            quantity: currentItem.quantity - purchasedItem.quantity,
+          };
+        })
+        .filter((item) => item.quantity > 0)
+    );
+  }, []);
+
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
@@ -53,6 +93,7 @@ export function CartProvider({ children }) {
         removeItem,
         changeQuantity,
         clearCart,
+        clearPurchasedItems,
         totalItems,
         totalPrice,
         isCartOpen,

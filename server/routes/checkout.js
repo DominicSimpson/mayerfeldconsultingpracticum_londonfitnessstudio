@@ -78,9 +78,10 @@ router.post("/create-session", requireAuth, async (req, res, next) => {
       throw new Error("Failed to associate checkout session with order");
     }
 
-        // Send the Stripe URL back to React
+// Send the Stripe URL and Checkout Session details back to React
         return res.json({
             url: checkoutSession.url,
+            sessionId: checkoutSession.id,
             orderId,
             totalPence,
         });

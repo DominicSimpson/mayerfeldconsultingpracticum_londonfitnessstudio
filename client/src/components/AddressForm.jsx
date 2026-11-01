@@ -71,12 +71,31 @@ export default function AddressForm() {
         throw new Error(data.error || "Unable to start Stripe Checkout");
       }
 
-      if (!data.url) {
-        throw new Error("Stripe Checkout URL was not returned");
+      if (!data.url || !data.sessionId) {
+        throw new Error("Stripe Checkout Session details were not returned");
       }
+
+      sessionStorage.setItem(
+        "lfs-pending-checkout", 
+        JSON.stringify({
+          sessionId: data.sessionId,
+          items: items.map((item) => ({
+            id: item.id,
+            date: item.date,            
+            hour: item.hour,
+            quantity: item.quantity,
+          })),
+        })
+      );
+
+      console.log(
+        "Pending checkout details saved to sessionStorage:",
+        data.sessionId
+      );
 
       // Redirect the customer to Stripe's hosted payment page:
       window.location.assign(data.url);
+
     } catch (err) {
       setStatus({ 
         state: "error", 
