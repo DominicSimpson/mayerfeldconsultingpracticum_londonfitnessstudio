@@ -87,7 +87,7 @@ export default function AddressForm() {
           })),
         })
       );
-
+      
       console.log(
         "Pending checkout details saved to sessionStorage:",
         data.sessionId
