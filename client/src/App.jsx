@@ -12,6 +12,7 @@ import ScrollUp from "./components/ScrollUp";
 import { useState } from "react";
 import AuthModal from "./components/AuthModal.jsx";
 import PaymentSuccess from "./components/PaymentSuccess.jsx";
+import Contact from "./components/Contact.jsx";
 
 function App() {
   const [authMode, setAuthMode] = useState(null);
@@ -62,6 +63,7 @@ function App() {
         <Facilities />
         <Membership />
         <OpeningTimes />
+        <Contact/>
       </>
     )}
       </main>

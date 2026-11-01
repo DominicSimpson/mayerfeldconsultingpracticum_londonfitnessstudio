@@ -14,7 +14,7 @@ export function Membership() {
         Membership
       </h2>
       <Paragraph className="text-center">
-        Choose the plan that fits how you train, then sign up in one click
+        Choose the plan that fits how you train, then sign up in one click.
       </Paragraph>
       <MembershipSelector tiers={tiers} />
     </section>
