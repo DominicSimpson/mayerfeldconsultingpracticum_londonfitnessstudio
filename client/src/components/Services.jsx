@@ -5,6 +5,7 @@ import londonNutritionCounsellingPhoto from "../assets/images/services/nutrition
 import londonWellnessProgramsPhoto from "../assets/images/services/wellnessprograms_photo.jpg";
 import BookingForm from "./BookingForm.jsx";
 import { useProducts } from "../useProducts.js";
+import ToggleOption from "./ToggleOption.jsx";
 
 const images = {
   fitness_classes: londonFitnessStudioPhoto,
@@ -16,8 +17,8 @@ const images = {
 function Services() {
   const { products: services, loading, error } = useProducts("service");
 
-  if (loading) return <p>Loading services...</p>;
-  if (error) return <p>Sorry, we couldn't load the services</p>;
+  if (loading) return <p className="font-p-text">Loading services...</p>;
+  if (error) return <p className="font-p-text">Sorry, we couldn't load the services</p>;
 
   return (
     <section className="w-full border border-black/35 rounded-lg p-6 flex flex-col gap-6">

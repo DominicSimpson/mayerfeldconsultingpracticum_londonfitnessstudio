@@ -123,7 +123,7 @@ export default function PaymentSuccess() {
     if (status === "checking") {
         return (
             <section role="status" className="p-8 text-center">
-                <h2 className="text-2xl font-bold">Checking your payment...</h2>
+                <h2 className="text-2xl font-p-text">Checking your payment...</h2>
                     <p>Please wait while we confirm your order</p>
             </section>
         );
@@ -132,17 +132,17 @@ export default function PaymentSuccess() {
     if (status === "paid") {
         return (
             <section className="p-8 text-center">
-                <h2 className="text-2xl font-bold">Payment successful</h2>
+                <h2 className="text-2xl font-p-text">Payment successful</h2>
 
-                <p className="mt-4">
+                <p className="mt-4 font-p-text">
                     Thank you! Your order number is <strong>{order.id}</strong>
                 </p>
 
-                <p className="mt-2">
+                <p className="mt-2 font-p-text">
                     Total paid: £{Number(order.total_price).toFixed(2)}
                 </p>
 
-                <p className="mt-4">
+                <p className="mt-4 font-p-text">
                     You can view your order in the My Dashboard section
                 </p>
             </section>
@@ -152,11 +152,11 @@ export default function PaymentSuccess() {
     if (status === "pending") {
         return (
             <section role="status" className="p-8 text-center">
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-2xl font-p-text">
                     Payment confirmation is taking longer than expected
                 </h2>
 
-                <p className="mt-4">
+                <p className="mt-4 font-p-text">
                     Your order has not yet been confirmed. Please check the My Dashboard section shortly
                 </p>
             </section>
@@ -165,11 +165,13 @@ export default function PaymentSuccess() {
 
     return (
         <section role="alert" className="p-8 text-center">
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-p-text">
                 Unable to verify payment
             </h2>
 
-            <p className="mt-4">{error}</p>
+            <p className="mt-4 font-p-text">
+                {error}
+            </p>
         </section>
     );
 }
