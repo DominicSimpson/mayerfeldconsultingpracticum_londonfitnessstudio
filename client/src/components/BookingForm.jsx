@@ -3,15 +3,32 @@ import DatePicker, { today } from "./DatePicker.jsx";
 import HourPicker from "./HourPicker.jsx";
 import { useCart } from "./CartContext.jsx";
 import QuantitySelector from "./QuantitySelector.jsx";
+import RemoveFromCart from "./RemoveFromCart.jsx";
 
 function BookingForm({ itemId, itemTitle, price }) {
-  const { addItem } = useCart();
+  const { addItem, removeItem, items } = useCart();
 
   const [selectedDate, setSelectedDate] = useState(today);
   const [selectedHour, setSelectedHour] = useState("09:00");
   const [quantity, setQuantity] = useState(1);
   const [confirmation, setConfirmation] = useState("");
 
+  const currentBooking = {
+    id: itemId,
+    date: selectedDate,
+    hour: selectedHour,
+  };
+
+  const isInCart = items.some((item) =>
+    item.id === currentBooking.id &&
+    item.date === currentBooking.date &&
+    item.hour === currentBooking.hour
+  );
+
+  function handleRemoveFromCart() {
+    removeItem(currentBooking);
+    setConfirmation(`${itemTitle} removed from your cart`);
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -60,12 +77,19 @@ function BookingForm({ itemId, itemTitle, price }) {
         max={10}
       />
 
-      <button
-        type="submit"
-        className="font-p-text font-bold border border-black/25 rounded-md px-6 py-2 bg-card hover:bg-black/5"
-      >
+      <div className="flex flex-wrap justify-center gap-3">
+        <button
+          type="submit"
+          className="font-p-text text-sm font-bold border border-black/25 rounded-md w-36 h-10 whitespace-no-wrap bg-card hover:bg-black/5"        >
         Add to Cart
       </button>
+
+        {isInCart && (
+          <RemoveFromCart
+            onRemove={handleRemoveFromCart}
+          />
+        )}
+      </div>
 
       <div className="min-h-18 w-full">
         {confirmation && (

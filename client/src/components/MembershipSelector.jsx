@@ -2,13 +2,14 @@ import { useState } from "react";
 import ToggleOption from "./ToggleOption.jsx";
 import FilterMenu from "./FilterMenu.jsx";
 import { useCart } from "./CartContext.jsx";
+import RemoveFromCart from "./RemoveFromCart.jsx";
 
 // adding a tier updates the menu automatically
 
 export default function MembershipSelector({ tiers }) {
   // The parent owns the selection; the dropdown and each ToggleOption
   // are controlled by it. "" means nothing selected.
-  const { addItem } = useCart();
+  const { addItem, removeItem, items } = useCart();
 
   const [selectedTierId, setSelectedTierId] = useState("");
   const [query, setQuery] = useState("");
@@ -50,6 +51,14 @@ export default function MembershipSelector({ tiers }) {
     }));
   }
 
+  function handleRemoveFromCart(tier) {
+    removeItem({ id: tier.id });
+
+    setConfirmations((previous) => ({
+      ...previous,
+      [tier.id]: `${tier.title} removed from your cart`,
+    }));
+  }
 
   const visibleTiers = tiers.filter((tier) =>
     tier.title.toLowerCase().includes(query.toLowerCase()),
@@ -100,13 +109,20 @@ export default function MembershipSelector({ tiers }) {
               }
             />
 
+          <div className="flex flex-col justify-center gap-3">
             <button
               type="button"
               onClick={() => handleAddToCart(tier)}
-              className="font-p-text font-bold border border-black/25 rounded-md px-6 py-2 bg-card hover:bg-black/5"
-            >
+              className="font-p-text text-sm font-bold border border-black/25 rounded-md w-36 h-10 whitespace-no-wrap bg-card hover:bg-black/5"        >
               Add to Cart
             </button>
+
+            {items.some((item) => item.id === tier.id) && (
+              <RemoveFromCart
+                onRemove={() => handleRemoveFromCart(tier)}
+              />
+            )}
+          </div>
 
             <div className="min-h-18 w-full">
               {confirmations[tier.id] && (
