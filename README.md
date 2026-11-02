@@ -26,7 +26,7 @@ The site had to obey the following specifications:
 - [x] Responsive classes rewritten mobile-first (unprefixed: sm:/md:/lg:)
 - [x] One real filter on main grid, built with useState
 - [x] One small controlled component reused per item (toggle/filter)
-- [x] Small, regular commits
+- [x] Small, regular commits (150 for this project)
 - [x] No horizontal scroll on any screen size
 - [x] Project split into a client and a server
 - [x] Postgres database with defined schema, connected to backend, including orders table

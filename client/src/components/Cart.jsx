@@ -104,7 +104,11 @@ function Cart({ openAuthModal }) {
                         {formatUKDate(item.date)} at {item.hour}
                       </p>
                     )}
-                    <p className="text-sm">{gbp.format(item.price)} each</p>
+                    <p className="text-sm">
+                      {gbp.format(item.price)}
+                      {item.billingPeriod === "year" ? " per year " : " each"}
+                      each
+                    </p>
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -130,6 +134,9 @@ function Cart({ openAuthModal }) {
 
                     <p className="font-p-text font-bold">
                       {gbp.format(item.price * item.quantity)}
+                      {item.billingPeriod === "year" && (
+                        <span className="text-sm font-normal"> /year</span>
+                      )}
                     </p>
                   </div>
 

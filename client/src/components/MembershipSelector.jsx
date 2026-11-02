@@ -79,6 +79,7 @@ export default function MembershipSelector({ tiers }) {
       title: tier.title,
       price: tier.price,
       quantity,
+      billingPeriod: "year",
     });
 
     setConfirmations((previous) => ({
@@ -149,7 +150,7 @@ export default function MembershipSelector({ tiers }) {
               dimmed={selectedTierId !== "" && tier.id !== selectedTierId}
               onChange={setSelectedTierId}
               title={tier.title}
-              price={`£${tier.price}`}
+              price={`£${tier.price}/year`}
               description={tier.text}
               features={tier.features}
               quantity={quantities[tier.id] ?? 1}
