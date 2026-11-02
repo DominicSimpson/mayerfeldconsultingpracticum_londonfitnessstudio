@@ -3,6 +3,7 @@ import {useAuth} from "../context/AuthContext.jsx";
 import { useCart } from "./CartContext.jsx";
 import Paragraph from "./Paragraph.jsx";
 import AddressForm from "./AddressForm.jsx";
+import { formatUKDate } from "../utils/formatUKDate.js";
 
 const gbp = new Intl.NumberFormat("en-GB", {
   style: "currency",
@@ -93,14 +94,14 @@ function Cart({ openAuthModal }) {
             <ul className="flex flex-col gap-4">
               {items.map((item) => (
                 <li
-                  key={`${item.id}-${item.date}-${item.hour}`}
+                  key={`${item.id}-${formatUKDate(item.date)}-${item.hour}`}
                   className="flex flex-col gap-2 border-b border-black/15 pb-4"
                 >
                   <div>
                     <p className="font-bold">{item.title}</p>
                     {item.date && (
                       <p className="text-sm">
-                        {item.date} at {item.hour}
+                        {formatUKDate(item.date)} at {item.hour}
                       </p>
                     )}
                     <p className="text-sm">{gbp.format(item.price)} each</p>

@@ -1,9 +1,6 @@
 import {pool} from "../db/pool.js";
 import { isBankHoliday } from "../../shared/bankHolidays.js";
-import {
-  OPENING_HOURS,
-  isWithinOpeningHours,
-} from "../../shared/openingHours.js";
+import { isWithinOpeningHours } from "../../shared/openingHours.js";
 
 const requiredFields = [
     "firstName",
@@ -18,17 +15,6 @@ const requiredFields = [
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-const VALID_HOURS_BY_DAY = Object.fromEntries(
-  Object.entries(OPENING_HOURS).map(([day, { open, close }]) => [
-    day,
-    new Set(
-      Array.from(
-        { length: close - open },
-        (_, i) => `${String(open + i).padStart(2, "0")}:00`
-      )
-    ),
-  ])
-);
 
 // Helper functions
 
@@ -211,12 +197,21 @@ export async function createPendingOrder({ userId, customer, items }) {
             }
 
             if (product.category !== "membership") {
+                // Check that the booking date is valid
                 if (!item.date || !isValidBookingDate(item.date)) {
                     throw new OrderValidationError(
                         `Invalid booking date for ${item.id}`,
                     );
                 }
 
+                // Check whether the centre is closed for a bank holiday:
+                if (isBankHoliday(item.date)) {
+                    throw new OrderValidationError(
+                        "The fitness centre is closed on bank holidays",
+                    );
+                }
+
+                // Check that the selected hour is within opening hours:
                 if (!isWithinOpeningHours(item.date, item.hour)) {
                     throw new OrderValidationError(
                         `The selected booking time is outside the fitness centre's opening hours`
@@ -226,12 +221,6 @@ export async function createPendingOrder({ userId, customer, items }) {
                 if (isPastBookingSlot(item.date, item.hour)) {
                     throw new OrderValidationError(
                         "You cannot book a date or time in the past"
-                    );
-                }
-
-                if (isBankHoliday(item.date)) {
-                    throw new OrderValidationError(
-                        "The fitness centre is closed on bank holidays",    
                     );
                 }
             }
@@ -356,23 +345,8 @@ export async function createPendingOrder({ userId, customer, items }) {
         throw error;
     } finally {
         client?.release();
-    }
-   
+    }   
 }
 
-function getBookingDay(dateString) {
-    const date = new Date(`${dateString}T00:00:00Z`);
 
-    const days = [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-    ];
-
-    return days[date.getUTCDay()];
-}
 
