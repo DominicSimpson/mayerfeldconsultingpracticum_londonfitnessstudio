@@ -9,7 +9,7 @@ export default function QuantitySelector({
         <div
             role="group"
             aria-label={`${title} quantity`}
-            className="mt-2 self-stretch flex items-center justify-between gap-3"
+            className="mt-2 self-stretch flex items-center justify-center gap-3 sm:justify-between"
         >
             <span className="font-p-text text-sm font-semibold text-nav-text p-3">
                 Quantity
