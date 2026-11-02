@@ -25,7 +25,7 @@ const appUrl = new URL(process.env.APP_URL).origin;
 router.use((req, res, next) => {
       console.log("Checkout session debug:", {
         sessionID: req.sessionID,
-        userId: res.session?.userId,
+        userId: req.session?.userId,
         hasSession: Boolean(req.session),  
     });
 
