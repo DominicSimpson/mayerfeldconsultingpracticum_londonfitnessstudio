@@ -4,6 +4,11 @@ import HourPicker from "./HourPicker.jsx";
 import { useCart } from "./CartContext.jsx";
 import QuantitySelector from "./QuantitySelector.jsx";
 import RemoveFromCart from "./RemoveFromCart.jsx";
+import { isBankHoliday } from "../../../shared/bankHolidays.js";
+import {
+  getBookableHours,
+  isWithinOpeningHours,
+} from "../../../shared/openingHours.js";
 
 function BookingForm({ itemId, itemTitle, price }) {
   const { addItem, removeItem, items } = useCart();
@@ -12,6 +17,12 @@ function BookingForm({ itemId, itemTitle, price }) {
   const [selectedHour, setSelectedHour] = useState("09:00");
   const [quantity, setQuantity] = useState(1);
   const [confirmation, setConfirmation] = useState(null);
+
+  const bankHoliday = isBankHoliday(selectedDate);
+
+  const availableHours = bankHoliday
+  ? []
+  : getBookableHours(selectedDate);
 
   const currentBooking = {
     id: itemId,
@@ -27,14 +38,16 @@ function BookingForm({ itemId, itemTitle, price }) {
 
   const confirmationIsValid = 
     confirmation?.type === "removed" ||
+    confirmation?.type === "error" ||
     (
       confirmation?.type === "added" &&
       items.some((item) =>
-        confirmation.booking.id === currentBooking.id &&
-        confirmation.booking.date === currentBooking.date &&
-        confirmation.booking.hour === currentBooking.hour
-    )
+        item.id === confirmation.booking.id &&
+        item.date === confirmation.booking.date &&
+        item.hour === confirmation.booking.hour
+      ) 
   );
+
   const wasInCart = useRef(isInCart);
 
   useEffect(() => {
@@ -61,8 +74,46 @@ function BookingForm({ itemId, itemTitle, price }) {
     });
   }
 
+  function handleDateChange(date) {
+    setSelectedDate(date);
+    setSelectedHour("");
+  
+
+    if (isBankHoliday(date)) {
+      setConfirmation({
+        type: "error",
+        message: "The fitness centre is closed on bank holidays. Please select another date.",
+      });
+    } else if (getBookableHours(date).length === 0) {
+      setConfirmation({
+        type: "error",
+        message: "No sessions available for the selected date.",
+      });
+    } else {
+      setConfirmation(null);
+    }
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
+
+    // Prevent bookings on bank holidays:
+    if (isBankHoliday(selectedDate)) {
+      setConfirmation({
+        type: "error",
+        message: "The fitness centre is closed on bank holidays. Please select another date.",
+      });
+      return;
+    }
+
+    // Check opening hours:
+    if (!availableHours.includes(selectedHour)) {
+      setConfirmation({
+        type: "error",
+        message: "The selected booking time is outside the fitness centre's opening hours. Please select another time.",
+      });
+      return;
+    }
 
     const booking = {
       id: itemId,
@@ -103,11 +154,17 @@ function BookingForm({ itemId, itemTitle, price }) {
 
       <DatePicker 
         value={selectedDate} 
-        onChange={setSelectedDate} 
+        onChange={handleDateChange} 
       />
 
-      <HourPicker value={selectedHour} 
-        onChange={setSelectedHour} 
+      <HourPicker 
+        value={availableHours.includes(selectedHour) ? selectedHour : ""} 
+        onChange={(hour) => {
+          setSelectedHour(hour);
+          setConfirmation(null);
+        }}
+        availableHours={availableHours}
+        disabled={bankHoliday} 
       />
 
       <QuantitySelector

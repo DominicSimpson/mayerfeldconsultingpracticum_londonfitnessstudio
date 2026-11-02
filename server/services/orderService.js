@@ -1,4 +1,9 @@
 import {pool} from "../db/pool.js";
+import { isBankHoliday } from "../../shared/bankHolidays.js";
+import {
+  OPENING_HOURS,
+  isWithinOpeningHours,
+} from "../../shared/openingHours.js";
 
 const requiredFields = [
     "firstName",
@@ -13,16 +18,6 @@ const requiredFields = [
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-const OPENING_HOURS = {
-  monday: { open: 8, close: 22 },
-  tuesday: { open: 8, close: 22 },
-  wednesday: { open: 8, close: 22 },
-  thursday: { open: 8, close: 22 },
-  friday: { open: 8, close: 22 },
-  saturday: { open: 8, close: 21 },
-  sunday: { open: 8, close: 18 },
-};
-
 const VALID_HOURS_BY_DAY = Object.fromEntries(
   Object.entries(OPENING_HOURS).map(([day, { open, close }]) => [
     day,
@@ -34,30 +29,6 @@ const VALID_HOURS_BY_DAY = Object.fromEntries(
     ),
   ])
 );
-
-const BANK_HOLIDAYS = new Set([
-  // When the fitness centre is closed due to Bank Holiday in England & Wales
-
-  // 2026
-  "2026-01-01", // New Year's Day
-  "2026-04-03", // Good Friday
-  "2026-04-06", // Easter Monday
-  "2026-05-04", // Early May bank holiday
-  "2026-05-25", // Spring bank holiday
-  "2026-08-31", // Summer bank holiday
-  "2026-12-25", // Christmas Day
-  "2026-12-28", // Boxing Day (substitute day)
-
-  // 2027
-  "2027-01-01", // New Year's Day
-  "2027-03-26", // Good Friday
-  "2027-03-29", // Easter Monday
-  "2027-05-03", // Early May bank holiday
-  "2027-05-31", // Spring bank holiday
-  "2027-08-30", // Summer bank holiday
-  "2027-12-27", // Christmas Day (substitute day)
-  "2027-12-28", // Boxing Day (substitute day)
-]);
 
 // Helper functions
 
@@ -246,12 +217,9 @@ export async function createPendingOrder({ userId, customer, items }) {
                     );
                 }
 
-                const day = getBookingDay(item.date);
-                const validHours = VALID_HOURS_BY_DAY[day];
-
-                if (!validHours?.has(item.hour)) {
+                if (!isWithinOpeningHours(item.date, item.hour)) {
                     throw new OrderValidationError(
-                        `Invalid booking time for ${item.id} on ${day}`,
+                        `The selected booking time is outside the fitness centre's opening hours`
                     );
                 }
 
@@ -261,10 +229,9 @@ export async function createPendingOrder({ userId, customer, items }) {
                     );
                 }
 
-                if (BANK_HOLIDAYS.has(item.date)) {
+                if (isBankHoliday(item.date)) {
                     throw new OrderValidationError(
-                        "The fitness centre is closed on bank holidays",
-
+                        "The fitness centre is closed on bank holidays",    
                     );
                 }
             }
