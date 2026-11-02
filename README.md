@@ -1,10 +1,8 @@
 # Mayerfeld Consulting Practicum
 
-<img width="1920" height="869" alt="londonfitnessstudio_screenshot" src="https://github.com/user-attachments/assets/4e7af53e-3dec-4727-981e-e02b71c28758" />
-<br>
-<br>
+![London Fitness Studio deployed website](client/src/assets/images/londonfitnessstudio_deployedsite_screenshot.png)<br>
 
-Section	Content
+## Section Content
 1. Project Overview
 2. Features
 3. Technologies Used
@@ -72,12 +70,12 @@ Users can purchase one of three annual membership plans:
 
 ### Booking Validation
 - Users can select a date and time for their bookings.
-- Bookings cannot be made on UK bank holidays (England and Wales).
+- Bookings cannot be made on bank holidays in England and Wales.
 - Bookings cannot be made outside the centre's opening hours.
 - Users receive an explanatory message when attempting to make an invalid booking.
 
 ### Shopping Cart
-- Users can add services, facilities and memberships to their shopping cart.
+- Users can add services, facilities, and memberships to their shopping cart.
 - Users can adjust quantities or remove items before checkout.
 - The shopping cart calculates the total cost of selected items.
 
@@ -115,19 +113,17 @@ Users can purchase one of three annual membership plans:
 - Drizzle
 
 
-### 4. System Architecture
+## 4. System Architecture
 
 The application follows a client-server architecture, with a React frontend communicating with a Node.js/Express backend through REST API endpoints.
 
-The backend manages authentication, booking validation, order processing and database operations. Neon PostgreSQL provides persistent storage, while Stripe Checkout handles test-mode payments.
+The backend manages authentication, booking validation, order processing, and database operations. Neon PostgreSQL provides persistent storage, while Stripe Checkout handles test-mode payments.
 
 In production, Render hosts the Express application, which also serves the compiled React frontend.
 
 The following diagram illustrates the application's main components and the interactions between them.
 
-```
-mermaid
-
+```mermaid
 flowchart TD
     A["User / Web Browser"]
     B["React Frontend<br/>Vite + Tailwind CSS"]
@@ -151,8 +147,6 @@ flowchart TD
     style D fill:#f3e8ff,stroke:#9333ea,color:#581c87
     style E fill:#fce7f3,stroke:#db2777,color:#831843
     style F fill:#fce7f3,stroke:#db2777,color:#831843
-
-
 ```
 
 
@@ -209,7 +203,7 @@ The Express backend runs on port `3001`, with Vite proxying API requests to the 
 
 ### Testing Stripe Payments Locally
 
-To test Stripe Checkout locally, install and authenticate the Stripe CLI.
+To test Stripe Checkout locally, install, and authenticate the Stripe CLI.
 
 Forward Stripe webhook events to the local Express backend:
 
@@ -230,9 +224,9 @@ You can then test the payment process using Stripe's test card:
 Successful payments are verified by the Stripe webhook before the corresponding order is marked as paid in the PostgreSQL database.
 
 
-## 5. Environment Variables
+## 6. Environment Variables
 
-The application requires several environment variables to connect to the PostgreSQL database, manage user sessions and process Stripe payments.
+The application requires several environment variables to connect to the PostgreSQL database, manage user sessions, and process Stripe payments.
 
 A template file, `server/.env.example`, is provided in the repository.
 
@@ -271,9 +265,9 @@ The `.env.example` file contains placeholder values only and is included in the 
 For production deployment on Render, environment variables are configured securely through the Render dashboard rather than stored in the repository.
 
 
-## 6. Database
+## 7. Database
 
-The application uses **PostgreSQL**, hosted on **Neon**, to store and manage user accounts, products, orders, sessions and payment information.
+The application uses **PostgreSQL**, hosted on **Neon**, to store and manage user accounts, products, orders, sessions, and payment information.
 
 The Express backend communicates with PostgreSQL using the `pg` (node-postgres) library. Drizzle ORM and Drizzle Kit are used for database schema management.
 
@@ -283,10 +277,10 @@ The application uses five main database tables:
 
 | Table | Description |
 |---|---|
-| `users` | Stores registered user information, including names, email addresses and securely hashed passwords. |
-| `products` | Stores available services, facilities and membership plans, including descriptions, categories and prices. |
-| `orders` | Stores customer details, order totals, payment statuses and Stripe Checkout session identifiers. |
-| `order_items` | Stores individual products associated with each order, including quantities, prices and booking dates and times. |
+| `users` | Stores registered user information, including names, email addresses, and securely hashed passwords. |
+| `products` | Stores available services, facilities, and membership plans, including descriptions, categories, and prices. |
+| `orders` | Stores customer details, order totals, payment statuses, and Stripe Checkout session identifiers. |
+| `order_items` | Stores individual products associated with each order, including quantities, prices, and booking dates and times. |
 | `user_sessions` | Stores server-side session information, allowing users to remain authenticated between requests. |
 
 ### Table Relationships
@@ -304,7 +298,7 @@ When an authenticated user proceeds to checkout:
 1. The Express backend validates the submitted customer information and shopping cart items.
 2. Product prices are retrieved directly from PostgreSQL to prevent price manipulation on the frontend.
 3. An order is created in the `orders` table with an initial payment status of `pending_payment`.
-4. The corresponding products, quantities, prices and booking details are saved in `order_items`.
+4. The corresponding products, quantities, prices, and booking details are saved in `order_items`.
 5. A Stripe Checkout session is created and its identifier is associated with the order.
 6. Once Stripe confirms successful payment through a verified webhook, the order's payment status is updated to `paid`.
 
@@ -314,7 +308,7 @@ This ensures that orders are only marked as paid following verified payment conf
 
 - User passwords are stored as secure password hashes rather than plaintext.
 - Database credentials are stored in environment variables.
-- Foreign key constraints maintain relationships between orders, users and products.
+- Foreign key constraints maintain relationships between orders, users, and products.
 - Database transactions are used when creating orders and their associated order items.
 - Product prices are validated on the server rather than trusted from the client.
 - User sessions are stored in PostgreSQL rather than relying on in-memory session storage.
@@ -326,22 +320,22 @@ The PostgreSQL database is hosted on Neon and accessed by the Express backend.
 In production, the application is deployed on Render, with the database connection configured through the `DATABASE_URL` environment variable.
 
 
-## 7. Stripe Integration
+## 8. Stripe Integration
 
 The application integrates **Stripe Checkout** to process payments securely in test mode. This was my first project using it.
 
-Users can purchase memberships and book services or facilities through the shopping cart. Payments are processed using Stripe's hosted Checkout page, while the Express backend manages order creation, payment verification and database updates.
+Users can purchase memberships and book services or facilities through the shopping cart. Payments are processed using Stripe's hosted Checkout page, while the Express backend manages order creation, payment verification, and database updates.
 
 ### Payment Process
 
-1. **Checkout:** An authenticated user selects products, adds them to their shopping cart and proceeds to checkout.
-2. **Order validation:** The Express backend validates the customer's details, selected products, quantities and booking information. Product prices are retrieved directly from the PostgreSQL database.
+1. **Checkout:** An authenticated user selects products, adds them to their shopping cart, and proceeds to checkout.
+2. **Order validation:** The Express backend validates the customer's details, selected products, quantities, and booking information. Product prices are retrieved directly from the PostgreSQL database.
 3. **Order creation:** A new order is created in the `orders` table with a payment status of `pending_payment`. The corresponding products are saved in `order_items`.
 4. **Stripe Checkout session:** The backend creates a Stripe Checkout session and associates its identifier with the order.
 5. **Payment:** The user is redirected to Stripe's hosted Checkout page to complete the payment using a test card.
 6. **Webhook verification:** Stripe sends a webhook event to the Express backend when payment is completed. The webhook signature is verified using the configured `STRIPE_WEBHOOK_SECRET`.
 7. **Database update:** Following successful webhook verification and payment confirmation, the order's `payment_status` is updated to `paid`.
-8. **Payment confirmation:** The user returns to the application, where the success page displays the order number, payment amount and payment status.
+8. **Payment confirmation:** The user returns to the application, where the success page displays the order number, payment amount, and payment status.
 
 ### Payment Security
 
@@ -387,10 +381,10 @@ Stripe's test-mode webhook endpoint is configured to send payment events to the 
 
 The Stripe secret key and webhook signing secret are configured securely through Render's environment variables.
 
-This allows the complete test payment process to be demonstrated on the deployed application, including checkout, webhook verification, database updates and payment confirmation.
+This allows the complete test payment process to be demonstrated on the deployed application, including checkout, webhook verification, database updates, and payment confirmation.
 
 
-## 8. Deployment
+## 9. Deployment
 
 The application is deployed on **Render** and connected to a **Neon PostgreSQL** database.
 
@@ -401,7 +395,7 @@ The application is deployed on **Render** and connected to a **Neon PostgreSQL**
 ### Hosting and Infrastructure
 
 - **Render:** Hosts the Express backend and serves the production build of the React frontend.
-- **Neon:** Hosts the PostgreSQL database containing users, products, orders and session data.
+- **Neon:** Hosts the PostgreSQL database containing users, products, orders, and session data.
 - **Stripe:** Processes test-mode payments through Stripe Checkout and sends webhook events to the deployed backend.
 
 ### Deployment Configuration
@@ -416,18 +410,18 @@ During deployment:
 4. The backend connects to the Neon PostgreSQL database using the `DATABASE_URL` environment variable.
 5. Stripe Checkout and webhook verification use credentials configured in Render's environment settings.
 
-Sensitive credentials, including database passwords, session secrets and Stripe API keys, are stored as environment variables rather than committed to GitHub.
+Sensitive credentials, including database passwords, session secrets, and Stripe API keys, are stored as environment variables rather than committed to GitHub.
 
 ### Production Payment Testing
 
 The deployed application supports the complete Stripe test-mode payment process.
 
-Users can create an account, add products to their shopping cart, complete a simulated payment through Stripe Checkout and view the resulting order in their dashboard.
+Users can create an account, add products to their shopping cart, complete a simulated payment through Stripe Checkout, and view the resulting order in their dashboard.
 
 Successful payments are verified through Stripe webhooks before the corresponding orders are marked as paid in PostgreSQL.
 
 
-## 9. Testing
+## 10. Testing
 
 The application has been manually tested in both the local development environment and the deployed Render environment to verify its core functionality.
 
@@ -449,7 +443,7 @@ The application has been manually tested in both the local development environme
 
 ### Shopping Cart
 
-- Tested adding services, facilities and memberships to the shopping cart.
+- Tested adding services, facilities, and memberships to the shopping cart.
 - Verified that quantities can be increased and decreased.
 - Confirmed that individual items can be removed.
 - Verified that the shopping cart calculates the total price of selected items.
@@ -465,12 +459,44 @@ The following scenarios have been verified:
 | Test Scenario | Expected Result |
 |---|---|
 | Successful Stripe test payment | Payment completes and the user returns to the success page |
-| Webhook verification | Stripe webhook verifies the payment and updates the
+| Webhook verification | Stripe webhook verifies the payment and updates the database |
+| Successful order | Order status changes from `pending_payment` to `paid` |
+| Payment cancellation | User returns to the cancellation page without completing payment |
+| Cancelled order | Order remains recorded as `pending_payment` |
+| Successful checkout | Shopping cart is cleared |
+| Cancelled checkout | Shopping cart contents are preserved |
+| Order history | Completed orders can be viewed in the user's dashboard |
+
+### Database Verification
+
+The Neon PostgreSQL database was inspected using SQL queries to verify that:
+
+- Orders are created with the correct customer details and total prices.
+- Each order is associated with its corresponding records in `order_items`.
+- Stripe Checkout session identifiers are stored against orders.
+- Payment statuses are updated following verified Stripe webhook events.
+- Cancelled payments do not incorrectly mark orders as paid.
+
+### Deployment Testing
+
+The deployed application was tested on Render to confirm that:
+
+- The React frontend loads successfully.
+- The Express backend responds to API requests.
+- The application can retrieve products from Neon PostgreSQL.
+- User authentication and session management work in the deployed environment.
+- Stripe Checkout and webhook verification function correctly in test mode.
+
+### Testing Approach
+
+Testing has primarily been performed manually through the browser, alongside API responses, server logs and SQL queries in Neon.
+
+Automated unit and integration testing could be introduced in future development to provide more comprehensive regression testing.
 
 
-## 12. Future Improvements
+## 11. Future Improvements
 
-Due to the time constraints of the Bootcamp, the application focuses on delivering its core functionality, including user authentication, bookings, shopping cart management and Stripe payment integration.
+Due to the time constraints of the Bootcamp, the application focuses on delivering its core functionality, including user authentication, bookings, shopping cart management, and Stripe payment integration.
 
 Given additional development time, the following improvements could be implemented.
 
@@ -480,23 +506,23 @@ The current booking system allows users to reserve services and facilities, but 
 
 For example:
 
-- **Swimming facilities:** Separate bookings for the main swimming pool, children's pool and swimming lessons.
-- **Fitness classes:** A wider selection of specific classes, including weight loss programmes, strength training, yoga and other specialised activities.
+- **Swimming facilities:** Separate bookings for the main swimming pool, children's pool, and swimming lessons.
+- **Fitness classes:** A wider selection of specific classes, including weight loss programmes, strength training, yoga, and other specialised activities.
 - **Wellness programmes:** More detailed descriptions and booking options for individual wellness activities.
-- **Lessons and coaching:** Dedicated booking options for swimming lessons, personal training and other instructor-led sessions.
+- **Lessons and coaching:** Dedicated booking options for swimming lessons, personal training, and other instructor-led sessions.
 
 ### Community Events and Concessions
 
 The website could provide more information about community activities and inclusive fitness opportunities, including:
 
 - A dedicated calendar of health and wellbeing events.
-- Activities specifically designed for children, families and older adults.
+- Activities specifically designed for children, families, and older adults.
 - Concessionary membership rates for eligible groups, including children and people aged over 60.
 - Community-focused fitness programmes and initiatives.
 
 ### Interactive Site Map
 
-A real fitness centre website would benefit from an interactive site map, allowing visitors to locate facilities such as swimming pools, gyms, sports courts, changing rooms and reception areas.
+A real fitness centre website would benefit from an interactive site map, allowing visitors to locate facilities such as swimming pools, gyms, sports courts, changing rooms, and reception areas.
 
 This could also improve accessibility by helping visitors plan their journeys around the centre.
 
@@ -515,7 +541,7 @@ This would help anchor the centre in its local community.
 
 ### Website Search Functionality
 
-A search bar could be introduced to help users quickly locate specific facilities, services, membership options and other information across the website.
+A search bar could be introduced to help users quickly locate specific facilities, services, membership options, and other information across the website.
 
 ### Automated Testing
 
@@ -526,3 +552,5 @@ Although the application's main functionality has been manually tested, future d
 I was not able to conduct an accessibility audit against WCAG 2.2 guidelines due to time constraints.
 
 
+
+Thank you for reading.
